@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hugo on Weiliang Lin</title>
+    <link>https://a447593787.github.io/tags/hugo/</link>
+    <description>Recent content in Hugo on Weiliang Lin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 19 Oct 2020 17:50:20 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>测试文章</title>
+      <link>https://a447593787.github.io/1/blog/</link>
+      <pubDate>Mon, 19 Oct 2020 17:50:20 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/1/blog/</guid>
+      <description> 123 123456
+ 125
+·
+   sad</description>
+    </item>
+    
+  </channel>
+</rss>
