@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='​	在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构尖峰数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，尖峰神经网络也是事件驱动的，可以直接处理传感器提供的基于尖峰的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。
+​	据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，自动化方法，特别是最近邻和最小生成树技术，可以获得更好的性能。'><title></title>
+    
+    <link rel='canonical' href='https://a447593787.github.io/snn/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content=''>
+<meta property='og:description' content='​	在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构尖峰数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，尖峰神经网络也是事件驱动的，可以直接处理传感器提供的基于尖峰的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。
+​	据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，自动化方法，特别是最近邻和最小生成树技术，可以获得更好的性能。'>
+<meta property='og:url' content='https://a447593787.github.io/snn/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/'>
+<meta property='og:site_name' content='Weiliang Lin'>
+<meta property='og:type' content='article'><meta property='article:section' content='Snn' />
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="​	在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构尖峰数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，尖峰神经网络也是事件驱动的，可以直接处理传感器提供的基于尖峰的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。
+​	据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，自动化方法，特别是最近邻和最小生成树技术，可以获得更好的性能。"></head><body class="article-page keep-sidebar">
+        <div class="container flex on-phone--column align-items--flex-start extended ">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+
+                
+                    
+                    <img src="/img/avatar_hu845b293eecd45ac4681077b7c8b17649_46149_300x300_resize_box_2.png" width="300"
+                        height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+
+                <span class="emoji">🍥</span>
+            </figure>
+        
+        <h1 class="site-name"><a href="https://a447593787.github.io/">Weiliang Lin</a></h1>
+        <h2 class="site-description">Ysu Lin Wei Liang&#39;s personal blog</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="https://a447593787.github.io/snn/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/"></a>
+    </h2>
+
+    </div>
+</header>
+
+    <section class="article-content">
+    <p>​		在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构尖峰数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，尖峰神经网络也是事件驱动的，可以直接处理传感器提供的基于尖峰的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。</p>
+<p>​	据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，自动化方法，特别是最近邻和最小生成树技术，可以获得更好的性能。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">&copy; 2020 Weiliang Lin</section>
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.0.5">Stack</a></b> designed by
+        <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Spiking Neural Network（脉冲神经网络）简述 传统神经网络包括现存的各种以perceptron为基本单元的拓扑变种， 比如卷积神经网络系列（CNNs), 循环神经网络系列（RNNs）, 生成对抗网络（GANs）， 自编码器（Autoencoders) 等等。 因为反向传播算法的存在和各类数学优化器的发展， 使得第二代神经网络在各项任务上有着出色的表现。
+Spiking Neural Network(SNN) 被公认为继现有的MLP为基础的第二代神经网络(ANN)之后发展的第三代神经网络。虽然传统神经网络已然在各项任务上取得了优异的成绩， 但它们的原理和运算过程仍然和真正的人脑信息处理过程依然相差甚远。主要的差异可以总结为以下几点
+ 传统神经网络算法仍然依据于使用高精度的浮点数进行运算， 然而人脑并不会使用浮点数进行运算。 在人的传感系统和大脑中， 信息会以动作电压或称之为电脉冲（electric spike）的形式传递，接受，和处理。 ANN的训练过程对反向传播算法（梯度下降)的依赖程度非常之高， 然而在真实的人脑学习过程中，科学家们还没有观察到这种学习类型。 更多的， 人脑的记忆和学习依赖于突触后细胞受到刺激后所产生的突触可塑性。 详见： Hebbian learning ANN通常需要大量的标签数据集来驱动网络的拟合。 这与我们平时经理的有所不同。 我们在很多情况下的感知和学习过程都是非监督式的。并且， 人脑通常不需要如此大量反复的数据来学习同一件事情。  综上所述， 为了使神经网络更加接近于人脑， SNN随而诞生了。发现它的灵感，就来自于生物大脑处理信息的方式—spikes。 读到这里，就应该已经明白SNN并不是一个像CNN,RNN这样的网络结构， 而是一个新型的，更加接近人脑的一种神经网络算法的统称
+SNN和CNN的区别 1、信息载体 ​	首先， 最基本的区别是SNN和ANN的信息载体不一样。 ANN 使用的是高精度浮点数而SNN使用的是spikes 或可以理解为1和0，这就大大增加了信息在网络中的稀疏性。这些spike在网络中有相同的幅度和区间.
+那么，在SNN中， 信息是如何用spike来表达的呢？ 这就涉及到脉冲编码的知识了。这里做简单介绍，之后我会再详细解释它。 在SNN中， 很重要的一点是引入了时序（temporal）相关的处理形式。 信息是被编码在脉冲序列的时间序列（spike train）中的。 例如： 高频率的一组脉冲序列可以代表一个较高的值而低频率的脉冲则代表低值。又例如： 在一个固定的时间窗中， 单个脉冲出现的位置也可以代表相应的值/信息。
+2、神经元 既然信息的载体不一样， 那么神经网络中的基本单元–神经元肯定也是不一样的。 对ANN有了解的同学们都知道， 基本神经元perceptron 是一个简单的 加乘运算器用来整合输入该神经元的值 而后接着一个非线性的激活方程（Non-linear activation function）。然而这种针对确切数值的运算并不适用于二进制脉冲的处理。 在SNN中， 基本的运算单元为以生物突触结构为基础构建的脉冲神经元（spiking neuron)。 想象有两个spiking neuron 其中一个为突触前神经元（pre-synaptic neuron）作为spiking的发出者， 一个为突触后神经元（post-synaptic neuron) 作为spike的接受者。 spiking neuron所进行的处理是接受由突触传递而来的脉冲， 依据突触权重通过spiking function产生突触后膜电压（post synaptic potential (PSP)）'><title></title>
+    
+    <link rel='canonical' href='https://a447593787.github.io/snn/snn/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content=''>
+<meta property='og:description' content='Spiking Neural Network（脉冲神经网络）简述 传统神经网络包括现存的各种以perceptron为基本单元的拓扑变种， 比如卷积神经网络系列（CNNs), 循环神经网络系列（RNNs）, 生成对抗网络（GANs）， 自编码器（Autoencoders) 等等。 因为反向传播算法的存在和各类数学优化器的发展， 使得第二代神经网络在各项任务上有着出色的表现。
+Spiking Neural Network(SNN) 被公认为继现有的MLP为基础的第二代神经网络(ANN)之后发展的第三代神经网络。虽然传统神经网络已然在各项任务上取得了优异的成绩， 但它们的原理和运算过程仍然和真正的人脑信息处理过程依然相差甚远。主要的差异可以总结为以下几点
+ 传统神经网络算法仍然依据于使用高精度的浮点数进行运算， 然而人脑并不会使用浮点数进行运算。 在人的传感系统和大脑中， 信息会以动作电压或称之为电脉冲（electric spike）的形式传递，接受，和处理。 ANN的训练过程对反向传播算法（梯度下降)的依赖程度非常之高， 然而在真实的人脑学习过程中，科学家们还没有观察到这种学习类型。 更多的， 人脑的记忆和学习依赖于突触后细胞受到刺激后所产生的突触可塑性。 详见： Hebbian learning ANN通常需要大量的标签数据集来驱动网络的拟合。 这与我们平时经理的有所不同。 我们在很多情况下的感知和学习过程都是非监督式的。并且， 人脑通常不需要如此大量反复的数据来学习同一件事情。  综上所述， 为了使神经网络更加接近于人脑， SNN随而诞生了。发现它的灵感，就来自于生物大脑处理信息的方式—spikes。 读到这里，就应该已经明白SNN并不是一个像CNN,RNN这样的网络结构， 而是一个新型的，更加接近人脑的一种神经网络算法的统称
+SNN和CNN的区别 1、信息载体 ​	首先， 最基本的区别是SNN和ANN的信息载体不一样。 ANN 使用的是高精度浮点数而SNN使用的是spikes 或可以理解为1和0，这就大大增加了信息在网络中的稀疏性。这些spike在网络中有相同的幅度和区间.
+那么，在SNN中， 信息是如何用spike来表达的呢？ 这就涉及到脉冲编码的知识了。这里做简单介绍，之后我会再详细解释它。 在SNN中， 很重要的一点是引入了时序（temporal）相关的处理形式。 信息是被编码在脉冲序列的时间序列（spike train）中的。 例如： 高频率的一组脉冲序列可以代表一个较高的值而低频率的脉冲则代表低值。又例如： 在一个固定的时间窗中， 单个脉冲出现的位置也可以代表相应的值/信息。
+2、神经元 既然信息的载体不一样， 那么神经网络中的基本单元–神经元肯定也是不一样的。 对ANN有了解的同学们都知道， 基本神经元perceptron 是一个简单的 加乘运算器用来整合输入该神经元的值 而后接着一个非线性的激活方程（Non-linear activation function）。然而这种针对确切数值的运算并不适用于二进制脉冲的处理。 在SNN中， 基本的运算单元为以生物突触结构为基础构建的脉冲神经元（spiking neuron)。 想象有两个spiking neuron 其中一个为突触前神经元（pre-synaptic neuron）作为spiking的发出者， 一个为突触后神经元（post-synaptic neuron) 作为spike的接受者。 spiking neuron所进行的处理是接受由突触传递而来的脉冲， 依据突触权重通过spiking function产生突触后膜电压（post synaptic potential (PSP)）'>
+<meta property='og:url' content='https://a447593787.github.io/snn/snn/'>
+<meta property='og:site_name' content='Weiliang Lin'>
+<meta property='og:type' content='article'><meta property='article:section' content='Snn' />
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="Spiking Neural Network（脉冲神经网络）简述 传统神经网络包括现存的各种以perceptron为基本单元的拓扑变种， 比如卷积神经网络系列（CNNs), 循环神经网络系列（RNNs）, 生成对抗网络（GANs）， 自编码器（Autoencoders) 等等。 因为反向传播算法的存在和各类数学优化器的发展， 使得第二代神经网络在各项任务上有着出色的表现。
+Spiking Neural Network(SNN) 被公认为继现有的MLP为基础的第二代神经网络(ANN)之后发展的第三代神经网络。虽然传统神经网络已然在各项任务上取得了优异的成绩， 但它们的原理和运算过程仍然和真正的人脑信息处理过程依然相差甚远。主要的差异可以总结为以下几点
+ 传统神经网络算法仍然依据于使用高精度的浮点数进行运算， 然而人脑并不会使用浮点数进行运算。 在人的传感系统和大脑中， 信息会以动作电压或称之为电脉冲（electric spike）的形式传递，接受，和处理。 ANN的训练过程对反向传播算法（梯度下降)的依赖程度非常之高， 然而在真实的人脑学习过程中，科学家们还没有观察到这种学习类型。 更多的， 人脑的记忆和学习依赖于突触后细胞受到刺激后所产生的突触可塑性。 详见： Hebbian learning ANN通常需要大量的标签数据集来驱动网络的拟合。 这与我们平时经理的有所不同。 我们在很多情况下的感知和学习过程都是非监督式的。并且， 人脑通常不需要如此大量反复的数据来学习同一件事情。  综上所述， 为了使神经网络更加接近于人脑， SNN随而诞生了。发现它的灵感，就来自于生物大脑处理信息的方式—spikes。 读到这里，就应该已经明白SNN并不是一个像CNN,RNN这样的网络结构， 而是一个新型的，更加接近人脑的一种神经网络算法的统称
+SNN和CNN的区别 1、信息载体 ​	首先， 最基本的区别是SNN和ANN的信息载体不一样。 ANN 使用的是高精度浮点数而SNN使用的是spikes 或可以理解为1和0，这就大大增加了信息在网络中的稀疏性。这些spike在网络中有相同的幅度和区间.
+那么，在SNN中， 信息是如何用spike来表达的呢？ 这就涉及到脉冲编码的知识了。这里做简单介绍，之后我会再详细解释它。 在SNN中， 很重要的一点是引入了时序（temporal）相关的处理形式。 信息是被编码在脉冲序列的时间序列（spike train）中的。 例如： 高频率的一组脉冲序列可以代表一个较高的值而低频率的脉冲则代表低值。又例如： 在一个固定的时间窗中， 单个脉冲出现的位置也可以代表相应的值/信息。
+2、神经元 既然信息的载体不一样， 那么神经网络中的基本单元–神经元肯定也是不一样的。 对ANN有了解的同学们都知道， 基本神经元perceptron 是一个简单的 加乘运算器用来整合输入该神经元的值 而后接着一个非线性的激活方程（Non-linear activation function）。然而这种针对确切数值的运算并不适用于二进制脉冲的处理。 在SNN中， 基本的运算单元为以生物突触结构为基础构建的脉冲神经元（spiking neuron)。 想象有两个spiking neuron 其中一个为突触前神经元（pre-synaptic neuron）作为spiking的发出者， 一个为突触后神经元（post-synaptic neuron) 作为spike的接受者。 spiking neuron所进行的处理是接受由突触传递而来的脉冲， 依据突触权重通过spiking function产生突触后膜电压（post synaptic potential (PSP)）"></head><body class="article-page keep-sidebar">
+        <div class="container flex on-phone--column align-items--flex-start extended ">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+
+                
+                    
+                    <img src="/img/avatar_hu845b293eecd45ac4681077b7c8b17649_46149_300x300_resize_box_2.png" width="300"
+                        height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+
+                <span class="emoji">🍥</span>
+            </figure>
+        
+        <h1 class="site-name"><a href="https://a447593787.github.io/">Weiliang Lin</a></h1>
+        <h2 class="site-description">Ysu Lin Wei Liang&#39;s personal blog</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="https://a447593787.github.io/snn/snn/"></a>
+    </h2>
+
+    </div>
+</header>
+
+    <section class="article-content">
+    <h1 id="spiking-neural-network脉冲神经网络简述">Spiking Neural Network（脉冲神经网络）简述</h1>
+<p>传统神经网络包括现存的各种以perceptron为基本单元的拓扑变种， 比如卷积神经网络系列（CNNs), 循环神经网络系列（RNNs）, 生成对抗网络（GANs）， 自编码器（Autoencoders) 等等。 因为反向传播算法的存在和各类数学优化器的发展， 使得第二代神经网络在各项任务上有着出色的表现。</p>
+<p>Spiking Neural Network(SNN) 被公认为继现有的MLP为基础的第二代神经网络(ANN)之后发展的第三代神经网络。虽然传统神经网络已然在各项任务上取得了优异的成绩， 但它们的原理和运算过程仍然和真正的人脑信息处理过程依然相差甚远。主要的差异可以总结为以下几点</p>
+<ol>
+<li>传统神经网络算法仍然依据于使用<strong>高精度的浮点数</strong>进行运算， 然而人脑并不会使用浮点数进行运算。 在人的传感系统和大脑中， <strong>信息会以动作电压或称之为电脉冲</strong>（electric spike）的形式传递，接受，和处理。</li>
+<li>ANN的训练过程对反向传播算法（梯度下降)的依赖程度非常之高， 然而在真实的人脑学习过程中，科学家们还没有观察到这种学习类型。 更多的， 人脑的记忆和学习依赖于突触后细胞受到刺激后所产生的突触可塑性。 详见： Hebbian learning</li>
+<li>ANN通常需要大量的标签数据集来驱动网络的拟合。 这与我们平时经理的有所不同。 我们在很多情况下的感知和学习过程都是非监督式的。并且， 人脑通常不需要如此大量反复的数据来学习同一件事情。</li>
+</ol>
+<p>综上所述， 为了使神经网络更加接近于人脑， SNN随而诞生了。发现它的灵感，就来自于生物大脑处理信息的方式—spikes。 读到这里，就应该已经明白SNN并不是一个像CNN,RNN这样的网络结构， 而是一个新型的，更加接近人脑的一种神经网络算法的<strong>统称</strong></p>
+<h2 id="snn和cnn的区别">SNN和CNN的区别</h2>
+<h2 id="1信息载体">1、信息载体</h2>
+<p>​		首先， 最基本的区别是SNN和ANN的信息载体不一样。 ANN 使用的是高精度浮点数而SNN使用的是spikes 或可以理解为1和0，这就大大增加了信息在网络中的稀疏性。这些spike在网络中有相同的幅度和区间.</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5csnn%5csnn%e5%92%8cann%e4%bf%a1%e6%81%af%e7%bd%91%e7%bb%9c%e8%bd%bd%e4%bd%93.png" alt=""  /></p>
+<p>那么，在SNN中， 信息是如何用spike来表达的呢？ 这就涉及到脉冲编码的知识了。这里做简单介绍，之后我会再详细解释它。 在SNN中， 很重要的一点是引入了时序（temporal）相关的处理形式。 信息是被编码在脉冲序列的时间序列（spike train）中的。 例如： 高频率的一组脉冲序列可以代表一个较高的值而低频率的脉冲则代表低值。又例如： 在一个固定的时间窗中， 单个脉冲出现的位置也可以代表相应的值/信息。</p>
+<h2 id="2神经元">2、神经元</h2>
+<p>既然信息的载体不一样， 那么神经网络中的基本单元–神经元肯定也是不一样的。 对ANN有了解的同学们都知道， 基本神经元perceptron 是一个简单的 加乘运算器用来整合输入该神经元的值 而后接着一个非线性的激活方程（Non-linear activation function）。然而这种针对确切数值的运算并不适用于二进制脉冲的处理。 在SNN中， 基本的运算单元为<strong>以生物突触结构为基础构建的脉冲神经元</strong>（spiking neuron)。 想象有两个spiking neuron 其中一个为突触前神经元（pre-synaptic neuron）作为spiking的<strong>发出者</strong>， 一个为突触后神经元（post-synaptic neuron) 作为spike的<strong>接受者</strong>。 spiking neuron所进行的处理是接受<strong>由突触传递而来的脉冲</strong>， 依据突触权重<strong>通过spiking function产生突触后膜电压</strong>（post synaptic potential (PSP)）</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5csnn%5csnn%e5%92%8cann%e4%bf%a1%e6%81%af%e7%bd%91%e7%bb%9c%e8%bd%bd%e4%bd%93.png" alt=""  /></p>
+<p>​		既然信息的载体不一样， 那么神经网络中的基本单元–神经元肯定也是不一样的。 对ANN有了解的都知道， 基本神经元perceptron 是一个简单的 加乘运算器用来整合输入该神经元的值 而后接着一个非线性的激活方程（Non-linear activation function）。然而这种针对确切数值的运算并不适用于二进制脉冲的处理。 在SNN中， 基本的运算单元为以生物突触结构为基础构建的脉冲神经元（spiking neuron)。 想象有两个spiking neuron 其中一个为突触前神经元（pre-synaptic neuron）作为spiking的发出者， 一个为突触后神经元（post-synaptic neuron) 作为spike的接受者。 spiking neuron所进行的处理是接受由突触传递而来的脉冲， 依据突触权重通过spiking function产生突触后膜电压（post synaptic potential (PSP)）</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5csnn%5cSNN%e7%a5%9e%e7%bb%8f%e5%85%83.png" alt=""  /></p>
+<p>​		那么PSP是啥呢，如下图膜电压在接受到脉冲输入前会一直保持在 − 70 -70−70mV 的地方， 这个值通常叫做静止值（resting value）。 当接受到刺激后， 会产生电压变化的幅值。 在变化结束后， 膜电压会归位回起始的静止值。</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5csnn%5c%e5%8d%95%e4%b8%aaspike%e4%ba%a7%e7%94%9f%e7%9a%84%e8%86%9c%e7%94%b5%e5%8e%8b%e5%8f%98%e5%8c%96.png" alt=""  /></p>
+<p>​		当一个突触后神经元接受到多个channel的脉冲序列输入膜电压会发生变化。</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5csnn%5c%e5%a4%9a%e4%b8%aaspike%e8%84%89%e5%86%b2%e4%bc%a0%e8%be%93.png" alt=""  /></p>
+<h2 id="3学习方法使用方法">3、学习方法/使用方法</h2>
+<p>传统ANN主要依赖于基于梯度下降的反向传播算法。 但在SNN中， 因为spiking neuron的function通常为不可导的差分方程， 在SNN中实现反向传播就显得异常的困难。 那么如何训练SNN呢？</p>
+<ol>
+<li>
+<p><strong>将传统ANN转换为SNN</strong></p>
+<p>既然SNN不可以使用BP来训练那么将传统的神经网络训练好转换为SNN是有可能的吗？ 答案是肯定的。 这种方法的优点是不用考虑任何SNN的特性， 但要将训练好的网络在输入，运算和输出上全面转换为以二进制spike为处理载体的网络。 在输入上，要将输入信号编码为脉冲序列。 所有神经元要用相应的spiking neuron来替换， 训练所得得权重要进行量化。</p>
+</li>
+<li>
+<p><strong>反向传播</strong></p>
+<p>脉冲神经元得spike function的确无法直接求导做差计算出梯度。 但研究人员想出了很多聪明得方法来预估网络中得变化参数得梯度从而进行反向传播。 这样得算法虽然还存在争论但它确实在某种程度上降低了SNN得训练复杂度， 这样得算法比如有 spikeprop, Slayer 等等</p>
+</li>
+<li>
+<p><strong>突触可塑性</strong></p>
+<p>这个相比前两种方法就更加接近于生物学得学习了。 利用生物学得原理研究人员将spike time dependent plasticity （脉冲时间相关可塑性）引入了SNN得训练。 然而这种训练方法虽然novel， 但训练过程非常繁琐， 而且是一种纯非监督式学习， 非常考验设计者对神经科学和神经网络得理解， 我会后续继续写出相关得博客来介绍并使用它。</p>
+</li>
+</ol>
+<p><a class="link" href="https://blog.csdn.net/Yannan_Strath/article/details/105761023"  target="_blank" rel="noopener"
+    >转载自博客</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">&copy; 2020 Weiliang Lin</section>
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.0.5">Stack</a></b> designed by
+        <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>

@@ -43,6 +43,11 @@
   </url>
   
   <url>
+    <loc>https://a447593787.github.io/p/test-chinese/</loc>
+    <lastmod>2020-09-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://a447593787.github.io/post/</loc>
     <lastmod>2020-09-09T00:00:00+00:00</lastmod>
   </url>
@@ -140,6 +145,47 @@
   <url>
     <loc>https://a447593787.github.io/about/</loc>
     <lastmod>2020-10-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/java/jvm%E8%99%9A%E6%8B%9F%E6%9C%BA/</loc>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/java_duoxiancheng/duoxiancheng/</loc>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/juc_bingfa/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/leetcode/leetcode/</loc>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/snn/snn/</loc>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/snn/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</loc>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/java_duoxiancheng/</loc>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/java/</loc>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/leetcode/</loc>
+  </url>
+  
+  <url>
+    <loc>https://a447593787.github.io/snn/</loc>
   </url>
   
 </urlset>

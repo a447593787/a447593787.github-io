@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='JVM虚拟机 JAVA内存分析 第一步，JVM去方法区寻找Test类的代码信息，如果有直接调用，没有的话使用类的加载机制把类加载进来。同时把静态变量、静态方法、常量加载进来。这里加载的是（“冯冬冬的IT技术栈”，“冯XX”）；这是因为字符串是常量，age中的18是基本类型。 第二步，jvm进入main方法，看到Person person=new Person()。首先分析Person这个类，同样的寻找Person类的代码信息，有就加载，没有的话类加载机制加载进来。同时也加载静态变量、静态方法、常量（“我正在走路。。。”） 第三步，jvm接下来看到了person，person在main方法内部，因而是局部变量，存放在栈空间中。 第四步，jvm接下来看到了new Person()。new出的对象（实例），存放在堆空间中。
+第五步，jvm接下来看到了“=”，把new Person的地址告诉person变量，person通过四字节的地址（十六进制），引用该实例。 是不是有点晕，别着急，画个图看一下
+第六步，jvm看到person.name = “冯冬冬的IT技术栈”;person通过引用new Person实例的name属性，该name属性通过地址指向常量池的&amp;quot;冯冬冬的IT技术栈&amp;quot;。 第七步，jvm看到person.age = 18; person的age属性是基本数据类型，直接赋值。
+第八步，jvm看到person.walk(); 调用实例的方法时，并不会在实例对象中生成一个新的方法，而是通过地址指向方法区中类信息的方法。走到这一步再看看图怎么变化的
+  JVM的位置
+  JVM的体系结构
+  类加载器
+作用：加载Class文件 new Student()；
+  虚拟机自带的加载器
+  启动类加载器
+  扩展类加载器EXC
+  应用程序加载器APP
+优先级从高到低，先调用高级的，没有就抛出异常
+双亲委派机制：安全
+ APP&amp;ndash;&amp;gt;EXC&amp;ndash;&amp;gt;BOOT(最终执行)    类加载器加载机制：
+  类加载器收到类加载的请求
+  将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器
+  启动加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则抛出异常，通知子加载器加载
+  重复步骤
+    双亲委派机制'><title></title>
+    
+    <link rel='canonical' href='https://a447593787.github.io/java/jvm%E8%99%9A%E6%8B%9F%E6%9C%BA/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content=''>
+<meta property='og:description' content='JVM虚拟机 JAVA内存分析 第一步，JVM去方法区寻找Test类的代码信息，如果有直接调用，没有的话使用类的加载机制把类加载进来。同时把静态变量、静态方法、常量加载进来。这里加载的是（“冯冬冬的IT技术栈”，“冯XX”）；这是因为字符串是常量，age中的18是基本类型。 第二步，jvm进入main方法，看到Person person=new Person()。首先分析Person这个类，同样的寻找Person类的代码信息，有就加载，没有的话类加载机制加载进来。同时也加载静态变量、静态方法、常量（“我正在走路。。。”） 第三步，jvm接下来看到了person，person在main方法内部，因而是局部变量，存放在栈空间中。 第四步，jvm接下来看到了new Person()。new出的对象（实例），存放在堆空间中。
+第五步，jvm接下来看到了“=”，把new Person的地址告诉person变量，person通过四字节的地址（十六进制），引用该实例。 是不是有点晕，别着急，画个图看一下
+第六步，jvm看到person.name = “冯冬冬的IT技术栈”;person通过引用new Person实例的name属性，该name属性通过地址指向常量池的&amp;quot;冯冬冬的IT技术栈&amp;quot;。 第七步，jvm看到person.age = 18; person的age属性是基本数据类型，直接赋值。
+第八步，jvm看到person.walk(); 调用实例的方法时，并不会在实例对象中生成一个新的方法，而是通过地址指向方法区中类信息的方法。走到这一步再看看图怎么变化的
+  JVM的位置
+  JVM的体系结构
+  类加载器
+作用：加载Class文件 new Student()；
+  虚拟机自带的加载器
+  启动类加载器
+  扩展类加载器EXC
+  应用程序加载器APP
+优先级从高到低，先调用高级的，没有就抛出异常
+双亲委派机制：安全
+ APP&amp;ndash;&amp;gt;EXC&amp;ndash;&amp;gt;BOOT(最终执行)    类加载器加载机制：
+  类加载器收到类加载的请求
+  将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器
+  启动加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则抛出异常，通知子加载器加载
+  重复步骤
+    双亲委派机制'>
+<meta property='og:url' content='https://a447593787.github.io/java/jvm%E8%99%9A%E6%8B%9F%E6%9C%BA/'>
+<meta property='og:site_name' content='Weiliang Lin'>
+<meta property='og:type' content='article'><meta property='article:section' content='JAVA' />
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="JVM虚拟机 JAVA内存分析 第一步，JVM去方法区寻找Test类的代码信息，如果有直接调用，没有的话使用类的加载机制把类加载进来。同时把静态变量、静态方法、常量加载进来。这里加载的是（“冯冬冬的IT技术栈”，“冯XX”）；这是因为字符串是常量，age中的18是基本类型。 第二步，jvm进入main方法，看到Person person=new Person()。首先分析Person这个类，同样的寻找Person类的代码信息，有就加载，没有的话类加载机制加载进来。同时也加载静态变量、静态方法、常量（“我正在走路。。。”） 第三步，jvm接下来看到了person，person在main方法内部，因而是局部变量，存放在栈空间中。 第四步，jvm接下来看到了new Person()。new出的对象（实例），存放在堆空间中。
+第五步，jvm接下来看到了“=”，把new Person的地址告诉person变量，person通过四字节的地址（十六进制），引用该实例。 是不是有点晕，别着急，画个图看一下
+第六步，jvm看到person.name = “冯冬冬的IT技术栈”;person通过引用new Person实例的name属性，该name属性通过地址指向常量池的&amp;quot;冯冬冬的IT技术栈&amp;quot;。 第七步，jvm看到person.age = 18; person的age属性是基本数据类型，直接赋值。
+第八步，jvm看到person.walk(); 调用实例的方法时，并不会在实例对象中生成一个新的方法，而是通过地址指向方法区中类信息的方法。走到这一步再看看图怎么变化的
+  JVM的位置
+  JVM的体系结构
+  类加载器
+作用：加载Class文件 new Student()；
+  虚拟机自带的加载器
+  启动类加载器
+  扩展类加载器EXC
+  应用程序加载器APP
+优先级从高到低，先调用高级的，没有就抛出异常
+双亲委派机制：安全
+ APP&amp;ndash;&amp;gt;EXC&amp;ndash;&amp;gt;BOOT(最终执行)    类加载器加载机制：
+  类加载器收到类加载的请求
+  将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器
+  启动加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则抛出异常，通知子加载器加载
+  重复步骤
+    双亲委派机制"></head><body class="article-page keep-sidebar">
+        <div class="container flex on-phone--column align-items--flex-start extended ">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+
+                
+                    
+                    <img src="/img/avatar_hu845b293eecd45ac4681077b7c8b17649_46149_300x300_resize_box_2.png" width="300"
+                        height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+
+                <span class="emoji">🍥</span>
+            </figure>
+        
+        <h1 class="site-name"><a href="https://a447593787.github.io/">Weiliang Lin</a></h1>
+        <h2 class="site-description">Ysu Lin Wei Liang&#39;s personal blog</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="https://a447593787.github.io/java/jvm%E8%99%9A%E6%8B%9F%E6%9C%BA/"></a>
+    </h2>
+
+    </div>
+</header>
+
+    <section class="article-content">
+    <h1 id="jvm虚拟机">JVM虚拟机</h1>
+<h2 id="java内存分析">JAVA内存分析</h2>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e5%88%9b%e5%bb%ba%e5%af%b9%e8%b1%a1%e5%86%85%e5%ad%98%e5%88%86%e6%9e%90%e4%be%8b%e5%ad%90.png" alt=""  /></p>
+<p>第一步，JVM去方法区寻找Test类的代码信息，如果有直接调用，没有的话使用类的加载机制把类加载进来。同时把静态变量、静态方法、常量加载进来。这里加载的是（“冯冬冬的IT技术栈”，“冯XX”）；这是因为字符串是常量，age中的18是基本类型。
+第二步，jvm进入main方法，看到Person person=new Person()。首先分析Person这个类，同样的寻找Person类的代码信息，有就加载，没有的话类加载机制加载进来。同时也加载静态变量、静态方法、常量（“我正在走路。。。”）
+第三步，jvm接下来看到了person，person在main方法内部，因而是局部变量，存放在栈空间中。
+第四步，jvm接下来看到了new Person()。new出的对象（实例），存放在堆空间中。</p>
+<p>第五步，jvm接下来看到了“=”，把new Person的地址告诉person变量，person通过四字节的地址（十六进制），引用该实例。 是不是有点晕，别着急，画个图看一下</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5cJAVA%e5%88%9b%e5%bb%ba%e5%af%b9%e8%b1%a1%e5%86%85%e5%ad%98%e5%88%86%e6%9e%901.png" alt=""  /></p>
+<p>第六步，jvm看到person.name = “冯冬冬的IT技术栈”;person通过引用new Person实例的name属性，该name属性通过地址指向常量池的&quot;冯冬冬的IT技术栈&quot;。 第七步，jvm看到person.age = 18; person的age属性是基本数据类型，直接赋值。</p>
+<p>第八步，jvm看到person.walk(); 调用实例的方法时，并不会在实例对象中生成一个新的方法，而是通过地址指向方法区中类信息的方法。走到这一步再看看图怎么变化的</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5cJAVA%e5%88%9b%e5%bb%ba%e5%af%b9%e8%b1%a1%e5%86%85%e5%ad%98%e5%88%86%e6%9e%902.png" alt=""  /></p>
+<ol>
+<li>
+<p>JVM的位置</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5cJVM%e7%9a%84%e4%bd%8d%e7%bd%ae.jpg" alt=""  /></p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5cJVM%e6%9e%b6%e6%9e%84%e5%9b%be%e8%af%a6%e7%bb%86.png" alt=""  /></p>
+</li>
+<li>
+<p>JVM的体系结构</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5cJVM%e4%bd%93%e7%b3%bb.png" alt=""  /></p>
+</li>
+<li>
+<p>类加载器</p>
+<p>作用：加载Class文件 new Student()；</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e7%b1%bb%e5%8a%a0%e8%bd%bd%e5%99%a8.png" alt=""  /></p>
+<ol>
+<li>
+<p>虚拟机自带的加载器</p>
+</li>
+<li>
+<p>启动类加载器</p>
+</li>
+<li>
+<p>扩展类加载器EXC</p>
+</li>
+<li>
+<p>应用程序加载器APP</p>
+<p>优先级从高到低，先调用高级的，没有就抛出异常</p>
+<p>双亲委派机制：安全</p>
+<ol>
+<li>APP&ndash;&gt;EXC&ndash;&gt;BOOT(最终执行)</li>
+</ol>
+</li>
+</ol>
+<p>类加载器加载机制：</p>
+<ol>
+<li>
+<p>类加载器收到类加载的请求</p>
+</li>
+<li>
+<p>将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器</p>
+</li>
+<li>
+<p>启动加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则抛出异常，通知子加载器加载</p>
+</li>
+<li>
+<p>重复步骤</p>
+</li>
+</ol>
+</li>
+<li>
+<p>双亲委派机制</p>
+</li>
+<li>
+<p>沙箱安全机制（例如WIN10管理员权限机制）（<strong>重要的是双亲委派机制</strong>）</p>
+<p>​		Java安全模型的核心就是Java沙箱（sandbox），什么是沙箱？沙箱是一个限制程序运行的环境。沙箱机制就是将 Java 代码限定在虚拟机(JVM)特定的运行范围中，并且严格限制代码对本地系统资源访问，通过这样的措施来保证对代码的有效隔离，防止对本地系统造成破坏。沙箱<strong>主要限制系统资源访问</strong>，那系统资源包括什么？——<code>CPU、内存、文件系统、网络</code>。不同级别的沙箱对这些资源访问的限制也可以不一样。</p>
+<p>  所有的Java程序运行都可以指定沙箱，可以定制安全策略。</p>
+<p>​		当前最新的安全机制实现，则引入了域 (Domain) 的概念。虚拟机会把所有代码加载到不同的系统域和应用域，系统域部分专门负责与关键资源进行交互，而各个应用域部分则通过系统域的部分代理来对各种需要的资源进行访问。虚拟机中不同的受保护域 (Protected Domain)，对应不一样的权限 (Permission)。存在于不同域中的类文件就具有了当前域的全部权限，如下图所示 最新的安全模型(jdk 1.6)</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e6%b2%99%e7%ae%b1%e5%ae%89%e5%85%a8%e6%9c%ba%e5%88%b6.png" alt=""  /></p>
+<p>  类装载器采用的机制是双亲委派模式。</p>
+<ol>
+<li>从最内层JVM自带类加载器开始加载，外层恶意同名类得不到加载从而无法使用；</li>
+<li>由于严格通过包来区分了访问域，外层恶意的类通过内置代码也无法获得权限访问到内层类，破坏代码就自然无法生效。</li>
+</ol>
+<ul>
+<li>
+<p><code>存取控制器</code>（access controller）：存取控制器可以控制核心API对操作系统的存取权限，而这个控制的策略设定，可以由用户指定。</p>
+</li>
+<li>
+<p><code>安全管理器</code>（security manager）：是核心API和操作系统之间的主要接口。实现权限控制，比存取控制器优先级高。</p>
+</li>
+<li>
+<pre><code>安全软件包
+</code></pre><p>（security package）：java.security下的类和扩展包下的类，允许用户为自己的应用增加新的安全特性，包括：</p>
+<ul>
+<li>安全提供者</li>
+<li>消息摘要</li>
+<li>数字签名</li>
+<li>加密</li>
+<li>鉴别</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Native（<strong>重点、唬住面试官</strong>）</p>
+<p>native：凡是带了native关键字，说明java的作用范围打不到了，回去调用底层的C语言的库</p>
+<p>会进入本地方法栈，调用本地方法找本地接口 JNI</p>
+<p>JNI的作用：扩展Java的使用，融合不同的编程语言为java使用，起初是为了调用C和C++，它在内存区域中专门开辟了一块标记区域：Native Method Stack 登记Natve方法，在最终执行的时候，加载本地方法库中的方法，通过JNI（例如Java程序驱动打印机），在企业级应用中较为少见</p>
+<p>调用其他接口：Socket，WebService http</p>
+</li>
+<li>
+<p>PC寄存器</p>
+<p>​		每个线程都有一个程序计数器，是线程私有的，就是一个指针，指向方法区中的方法字节码（用来存储指向一条指令的地址，也即将要执行的指令代码），在执行引擎读取下一条指令，是一个非常小的空间</p>
+</li>
+<li>
+<p>方法区</p>
+<p>Method Area 方法区</p>
+<p>​		方法是被所有线程共享，所有字段和方法字节码，以及一些特殊方法，如构造函数，接口代码也在此定义，简单说，所有定义的方法信息都保存在这个区域，此区域属于共享区间：</p>
+<p>​		<strong>静态变量，常量，类信息（构造方法，接口定义）运行时的常量池存在方法区中，但是实例变量存在堆内存中，和方法区无关</strong>。（static，final，Class，常量池）</p>
+</li>
+<li>
+<p>栈</p>
+<p>栈：数据结构</p>
+<p>程序 = 数据结构 + 算法：持续学习</p>
+<p>程序 = 框架 + 业务逻辑：吃饭</p>
+<p>栈：栈内存，主管程序的运行，声明周期和线程同步，线程技术，栈内存就是释放，对于栈来说，不存在垃圾回收的问题，一旦线程技术，栈就over</p>
+<p>8大基本类型 + 对象引用 + 实例的方法</p>
+<p>栈运行原理：栈帧     StackOverflowError   栈溢出异常</p>
+<p>栈 + 堆 + 方法区：交互关系</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e6%a0%88.png" alt=""  /></p>
+<p>程序正在执行的方法，一定在栈的顶部</p>
+</li>
+<li>
+<p>三种JVM</p>
+<ul>
+<li>Sun公司：HotSpot</li>
+<li>BEA JRockit</li>
+<li>IBM J9 VM</li>
+</ul>
+</li>
+<li>
+<p>新生区、老年区</p>
+</li>
+<li>
+<p>堆</p>
+<p>Heap，一个JVM只有一个堆内存，堆内存的大小是可以调节的</p>
+<p>类加载器读取了类文件后，一般会把什么东西放到堆中，类，方法，常量，变量~，保存我们所有引用类型的真实对象。</p>
+<p>堆内存中还要细分为三个区域：</p>
+<ul>
+<li>新生区（伊甸园） Young new</li>
+<li>老年区</li>
+<li>永久区</li>
+</ul>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e6%96%b0%e7%94%9f%e5%8c%ba%e5%85%bb%e8%80%81%e5%8c%ba%e6%b0%b8%e4%b9%85%e5%8c%ba.png" alt=""  /></p>
+<p>GC垃圾回收在伊甸园区和养老区，两个幸存区是过渡区</p>
+<p>假设内存满了，<strong>OOM</strong>，堆内存不够</p>
+<p><strong>OOM解决办法：</strong></p>
+<ol>
+<li>先检查代码问题</li>
+<li>尝试扩大堆内存看结果</li>
+<li>分析内存，看一下哪个地方出现了问题（专业工具）</li>
+<li>使用JPofiler工具分析OOM原因</li>
+</ol>
+<p>在JDK8以后，永久存储区有另外一个名字，元空间</p>
+</li>
+<li>
+<p>新生区、老年区、永久区（<strong>重点</strong>）</p>
+<p><strong>新生区</strong>：</p>
+<ul>
+<li>类：诞生和成长的地方，甚至死亡</li>
+<li>伊甸园，所有的对象都在伊甸园区</li>
+<li>幸存者区（0、1）</li>
+</ul>
+<p><strong>老年区：</strong></p>
+<p>真理：经过研究，99%的对象都是临时对象</p>
+<p>**永久区（非堆）：**这个区域常驻内存的。用来存放JDK自身携带的Class对象，Interface元数据，存储的是Java运行时的一些环境或类信息，这个区域不存在垃圾回收。关闭VM虚拟就会释放这个区域的内存。</p>
+<p>一个启动类加载了大量的第三方jar包，tomcat部署了太多的应用，大量动态生成的反射类，不断地被加载，知道内存满，就会出现OOM。</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e6%96%b0%e7%94%9f%e5%8c%ba%e5%85%bb%e8%80%81%e5%8c%ba%e6%b0%b8%e4%b9%85%e5%8c%ba2.png" alt=""  /></p>
+<ul>
+<li>jdk1.6之前：永久代，常量池是在方法区</li>
+<li>jdk1.7：永久代，但是慢慢地退化了，常量池在对中</li>
+<li>jdk1.8之后：无永久代，常量池在元空间</li>
+<li>元空间存在于本地内存，不存在于JVM内存中</li>
+</ul>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e6%96%b0%e7%94%9f%e5%8c%ba%e5%85%bb%e8%80%81%e5%8c%ba%e6%b0%b8%e4%b9%85%e5%8c%ba3.png" alt=""  /></p>
+<p><strong>项目出错</strong>：在一个项目中，突然出现了OOM故障，那么该如何排除，研究为什么出错</p>
+<ul>
+<li>能够看到代码第几行出错，内存快照分析工具，MAT，Jprofiler</li>
+<li>Debug，一行行分析代码</li>
+</ul>
+<p>MAT，Jprofiler作用：</p>
+<ul>
+<li>分析Dump内存文件，快速定位内存泄漏</li>
+<li>获得</li>
+</ul>
+</li>
+<li>
+<p>堆内存调优</p>
+</li>
+<li>
+<p><strong>GC：垃圾回收（重点）</strong></p>
+<p>方法区和堆区是垃圾回收重要区域，99%是在堆区。</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5cGC%e4%bd%9c%e7%94%a8%e5%8c%ba%e5%9f%9f.png" alt=""  /></p>
+<p>JVM在进行GC时，并不是对这三个区域统一回收，大部分时候，回收的都是新生代</p>
+<ul>
+<li>新生代</li>
+<li>幸存区(from  to)  <strong>谁空谁是to</strong>！！！！</li>
+<li>老年区</li>
+</ul>
+<p>GC两种类：轻GC（普通的GC），重GC（全局GC）</p>
+<p>题目：</p>
+<ul>
+<li>JVM的内存模型和分区-详细到每个区放什么</li>
+<li>堆里面的分区有哪些？Eden，from，to，老年区，说说他们的特点</li>
+<li>GC的算法有哪些？标记清楚发，标记整理，复制算法，引用计数器（几乎没有使用），怎么用的？</li>
+<li>轻GC和重GC分别在什么时候发生？
+<ol>
+<li>每次轻GC都会将Eden活的对象移到幸存区中，一旦Eden区被GC后，就会是空的</li>
+<li>当一个对象经历了15次GC，都还没有死，通过参数可以设定进入老年代的时间</li>
+</ol>
+</li>
+</ul>
+<p><strong>引用计数法（不常使用）：</strong></p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e5%bc%95%e7%94%a8%e8%ae%a1%e6%95%b0%e6%b3%95.png" alt="啥"  /></p>
+<p><strong>复制算法</strong></p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e5%a4%8d%e5%88%b6%e7%ae%97%e6%b3%95.png" alt=""  /></p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e5%a4%8d%e5%88%b6%e7%ae%97%e6%b3%951.png" alt=""  /></p>
+<ul>
+<li>好处：没有内存的碎片</li>
+<li>坏处：浪费内存空间：多了一半空间永远是空to。假设对象100%存活</li>
+</ul>
+<p>复制算法最佳使用场景：对象存活度较低的时候</p>
+<p><strong>标记清除算法</strong></p>
+<p>先标记清楚几次</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e6%a0%87%e8%ae%b0%e6%b8%85%e9%99%a4%e7%ae%97%e6%b3%95.png" alt=""  /></p>
+<ul>
+<li>优点：不需要额外的空间！</li>
+<li>缺点：两次扫描，严重浪费时间，产生内存碎片</li>
+</ul>
+<p><strong>标记压缩</strong></p>
+<p>再进行压缩</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5c%e6%a0%87%e8%ae%b0%e5%8e%8b%e7%bc%a9.png" alt=""  /></p>
+<p>有不连续的内存存储就存在内存碎片</p>
+</li>
+</ol>
+<p>​		引用计数法（不常使用）：</p>
+<h2 id="总结">总结</h2>
+<p>内存效率：复制算法 &gt; 标记清除算法 &gt; 标记压缩算法  （时间复杂度）</p>
+<p>内存整齐度：复制算法= 标记压缩算法 &gt; 标记清除算法</p>
+<p>内存利用率：标记压缩算法 = 标记清除算法 &gt; 复制算法</p>
+<p>思考一个问题：难道没有最优算法</p>
+<p>答案：没有，没有最好的算法，只有最合适的算法&mdash;&mdash;-&gt; GC：分代收集算法</p>
+<p>​</p>
+<p>年轻代：</p>
+<ul>
+<li>存活率低</li>
+<li>复制算法</li>
+</ul>
+<p>老年代：</p>
+<ul>
+<li>区域大：存活率</li>
+<li>标记清楚 （内存碎片不是太多）+ 标记压缩混合实现</li>
+</ul>
+<p>基本了解jvm</p>
+<h1 id="jmmjava内存模型">JMM：java内存模型</h1>
+<ol>
+<li>
+<p>什么是 JMM？</p>
+</li>
+<li>
+<p>它干嘛的？：官方、其他人的博客、对应的视频</p>
+<p>作用：缓存一致性协议，用于定义数据读写的规则（遵守，找到这个规则）</p>
+<p>JMM定义了线程和主内存之间的抽象关系：线程之间的共享变量存储在主内存（Main Memory）中，每个线程都有一个私有的本地内存（Local Memory）</p>
+<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5cJMM.png" alt=""  /></p>
+<p>解决共享对象可见性这个问题：volatile</p>
+</li>
+<li>
+<p>它该如何学习</p>
+<p>JMM：抽象的概念，理论</p>
+<p>volatile：保证可见性，不保证原子性，防止指令重排</p>
+<p>synchronized</p>
+</li>
+</ol>
+<p>学习新东西是常态：</p>
+<p>面试：</p>
+<p>3/10 == pass 面经 = 10 分析这10个？触类旁通：百度面试题？</p>
+<p>通过大量面试总结，得出一套解题思路</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">&copy; 2020 Weiliang Lin</section>
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.0.5">Stack</a></b> designed by
+        <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>

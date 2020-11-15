@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JAVAs on Weiliang Lin</title>
+    <link>https://a447593787.github.io/java/</link>
+    <description>Recent content in JAVAs on Weiliang Lin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://a447593787.github.io/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://a447593787.github.io/java/jvm%E8%99%9A%E6%8B%9F%E6%9C%BA/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://a447593787.github.io/java/jvm%E8%99%9A%E6%8B%9F%E6%9C%BA/</guid>
+      <description>JVM虚拟机 JAVA内存分析 第一步，JVM去方法区寻找Test类的代码信息，如果有直接调用，没有的话使用类的加载机制把类加载进来。同时把静态变量、静态方法、常量加载进来。这里加载的是（“冯冬冬的IT技术栈”，“冯XX”）；这是因为字符串是常量，age中的18是基本类型。 第二步，jvm进入main方法，看到Person person=new Person()。首先分析Person这个类，同样的寻找Person类的代码信息，有就加载，没有的话类加载机制加载进来。同时也加载静态变量、静态方法、常量（“我正在走路。。。”） 第三步，jvm接下来看到了person，person在main方法内部，因而是局部变量，存放在栈空间中。 第四步，jvm接下来看到了new Person()。new出的对象（实例），存放在堆空间中。
+第五步，jvm接下来看到了“=”，把new Person的地址告诉person变量，person通过四字节的地址（十六进制），引用该实例。 是不是有点晕，别着急，画个图看一下
+第六步，jvm看到person.name = “冯冬冬的IT技术栈”;person通过引用new Person实例的name属性，该name属性通过地址指向常量池的&amp;quot;冯冬冬的IT技术栈&amp;quot;。 第七步，jvm看到person.age = 18; person的age属性是基本数据类型，直接赋值。
+第八步，jvm看到person.walk(); 调用实例的方法时，并不会在实例对象中生成一个新的方法，而是通过地址指向方法区中类信息的方法。走到这一步再看看图怎么变化的
+  JVM的位置
+  JVM的体系结构
+  类加载器
+作用：加载Class文件 new Student()；
+  虚拟机自带的加载器
+  启动类加载器
+  扩展类加载器EXC
+  应用程序加载器APP
+优先级从高到低，先调用高级的，没有就抛出异常
+双亲委派机制：安全
+ APP&amp;ndash;&amp;gt;EXC&amp;ndash;&amp;gt;BOOT(最终执行)    类加载器加载机制：
+  类加载器收到类加载的请求
+  将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器
+  启动加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则抛出异常，通知子加载器加载
+  重复步骤
+    双亲委派机制</description>
+    </item>
+    
+  </channel>
+</rss>
