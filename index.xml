@@ -160,11 +160,11 @@
 &lt;p&gt;真实对象专注做自己的事情&lt;/p&gt;
 &lt;h2 id=&#34;lamda表达式&#34;&gt;Lamda表达式&lt;/h2&gt;
 &lt;p&gt;函数式 接口：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e5%87%bd%e6%95%b0%e5%bc%8f%e6%8e%a5%e5%8f%a3.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;%e5%87%bd%e6%95%b0%e5%bc%8f%e6%8e%a5%e5%8f%a3.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
 &lt;p&gt;Lamda表达式&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5clamda%e8%a1%a8%e8%be%be%e5%bc%8f.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;lamda%e8%a1%a8%e8%be%be%e5%bc%8f.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
 &lt;h2 id=&#34;线程状态&#34;&gt;线程状态&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e7%8a%b6%e6%80%81.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;%e7%ba%bf%e7%a8%8b%e7%8a%b6%e6%80%81.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;线程停止&lt;/strong&gt;&lt;/p&gt;
@@ -175,16 +175,16 @@
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;线程休眠&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;sleep指定当前线程阻塞的毫秒数&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e4%bc%91%e7%9c%a0sleep.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;%e7%ba%bf%e7%a8%8b%e4%bc%91%e7%9c%a0sleep.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;线程礼让——yield&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e7%a4%bc%e8%ae%a9.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;%e7%ba%bf%e7%a8%8b%e7%a4%bc%e8%ae%a9.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;线程强制执行——join&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;想象为插队&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e5%bc%ba%e5%88%b6%e6%89%a7%e8%a1%8c.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;%e7%ba%bf%e7%a8%8b%e5%bc%ba%e5%88%b6%e6%89%a7%e8%a1%8c.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 </description>

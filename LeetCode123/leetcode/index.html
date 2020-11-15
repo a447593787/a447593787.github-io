@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html lang="en-us"><head>
     <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='这是一个副标题'><title>java多线程入门</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='《剑指offer》刷题类型总结
+数据结构类题目   LinkedList（链表类）
+ 003-从头到尾打印链表 014-链表中倒数第k个结点 015-反转链表 016-合并两个或k个有序链表 025-复杂链表的复制 036-两个链表的第一个公共节点 055-链表中环的入口节点 056-删除链表中重复的节点    Tree（树）
+ 004-重建二叉树 017-树的子结构 018-二叉树的镜像 022-从上往下打印二叉树 023-二叉搜索树的后续遍历序列 026-二叉搜索树与双向链表 024-二叉树中和为某一值的路径 038-二叉树的深度 039-平衡二叉树 057-二叉树的下一个节点 058-对称的二叉树 059-按之字形顺序打印二叉树 060-把二叉树打印成多行 061-序列化二叉树 062-二叉搜索树的第k个节点    栈和队列
+ 005-用两个栈实现队列 020-包含min函数的栈 021-栈的压入、弹出序列 044-翻转单词顺序列（栈) 064-滑动窗口的最大值（双端队列）    Heap（堆）
+ 029-最小的K个数    哈希表
+ 034-第一个只出现一次的字符    图
+ 065-矩阵中的路径（BFS） 066-机器人的运动范围（DFS）    具体算法类题目   斐波那契数列'><title></title>
     
-    <link rel='canonical' href='https://a447593787.github.io/p/test-chinese/'>
+    <link rel='canonical' href='https://a447593787.github.io/leetcode123/leetcode/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='java多线程入门'>
-<meta property='og:description' content='这是一个副标题'>
-<meta property='og:url' content='https://a447593787.github.io/p/test-chinese/'>
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content=''>
+<meta property='og:description' content='《剑指offer》刷题类型总结
+数据结构类题目   LinkedList（链表类）
+ 003-从头到尾打印链表 014-链表中倒数第k个结点 015-反转链表 016-合并两个或k个有序链表 025-复杂链表的复制 036-两个链表的第一个公共节点 055-链表中环的入口节点 056-删除链表中重复的节点    Tree（树）
+ 004-重建二叉树 017-树的子结构 018-二叉树的镜像 022-从上往下打印二叉树 023-二叉搜索树的后续遍历序列 026-二叉搜索树与双向链表 024-二叉树中和为某一值的路径 038-二叉树的深度 039-平衡二叉树 057-二叉树的下一个节点 058-对称的二叉树 059-按之字形顺序打印二叉树 060-把二叉树打印成多行 061-序列化二叉树 062-二叉搜索树的第k个节点    栈和队列
+ 005-用两个栈实现队列 020-包含min函数的栈 021-栈的压入、弹出序列 044-翻转单词顺序列（栈) 064-滑动窗口的最大值（双端队列）    Heap（堆）
+ 029-最小的K个数    哈希表
+ 034-第一个只出现一次的字符    图
+ 065-矩阵中的路径（BFS） 066-机器人的运动范围（DFS）    具体算法类题目   斐波那契数列'>
+<meta property='og:url' content='https://a447593787.github.io/leetcode123/leetcode/'>
 <meta property='og:site_name' content='Weiliang Lin'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2020-09-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2020-09-09T00:00:00&#43;00:00'/><meta property='og:image' content='https://a447593787.github.io/helena-hertz-wWZzXlDpMog-unsplash.jpg' />
-<meta name="twitter:title" content="java多线程入门">
-<meta name="twitter:description" content="这是一个副标题"><meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:image" content='https://a447593787.github.io/helena-hertz-wWZzXlDpMog-unsplash.jpg' /></head><body class="">
-        <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
+<meta property='og:type' content='article'><meta property='article:section' content='LeetCode123' />
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="《剑指offer》刷题类型总结
+数据结构类题目   LinkedList（链表类）
+ 003-从头到尾打印链表 014-链表中倒数第k个结点 015-反转链表 016-合并两个或k个有序链表 025-复杂链表的复制 036-两个链表的第一个公共节点 055-链表中环的入口节点 056-删除链表中重复的节点    Tree（树）
+ 004-重建二叉树 017-树的子结构 018-二叉树的镜像 022-从上往下打印二叉树 023-二叉搜索树的后续遍历序列 026-二叉搜索树与双向链表 024-二叉树中和为某一值的路径 038-二叉树的深度 039-平衡二叉树 057-二叉树的下一个节点 058-对称的二叉树 059-按之字形顺序打印二叉树 060-把二叉树打印成多行 061-序列化二叉树 062-二叉搜索树的第k个节点    栈和队列
+ 005-用两个栈实现队列 020-包含min函数的栈 021-栈的压入、弹出序列 044-翻转单词顺序列（栈) 064-滑动窗口的最大值（双端队列）    Heap（堆）
+ 029-最小的K个数    哈希表
+ 034-第一个只出现一次的字符    图
+ 065-矩阵中的路径（BFS） 066-机器人的运动范围（DFS）    具体算法类题目   斐波那契数列"></head><body class="article-page keep-sidebar">
+        <div class="container flex on-phone--column align-items--flex-start extended ">
             <aside class="sidebar left-sidebar sticky">
     <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
@@ -101,118 +121,158 @@
     </ol>
 </aside>
             <main class="main full-width">
-    <div id="article-toolbar">
-        <a href="https://a447593787.github.io/" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="15 6 9 12 15 18" />
-</svg>
-
-
-
-            <span>Back</span>
-        </a>
-    </div>
-
-    <article class="has-image main-article">
+    <article class="main-article">
     <header class="article-header">
-        <div class="article-image">
-            
-                <img src="helena-hertz-wWZzXlDpMog-unsplash.jpg" loading="lazy" alt="Featured image of post Chinese Test" />
-            
-        </div>
-    
 
     <div class="article-details">
     
-    <header class="article-category">
-        
-            
-                <a href="https://a447593787.github.io/categories/test/">Test</a>
-            
-        
-            
-                <a href="https://a447593787.github.io/categories/%E6%B5%8B%E8%AF%95/">测试</a>
-            
-        
-    </header>
-    
 
     <h2 class="article-title">
-        <a href="https://a447593787.github.io/p/test-chinese/">java多线程入门</a>
+        <a href="https://a447593787.github.io/leetcode123/leetcode/"></a>
     </h2>
 
-    
-    <h3 class="article-subtitle">
-        这是一个副标题
-    </h3>
-    <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
-</svg>
-
-
-
-        <time class="article-time--published">Sep 09, 2020</time>
-    </footer></div>
+    </div>
 </header>
 
     <section class="article-content">
-    <h1 id="java多线程详解">java多线程详解</h1>
-<h2 id="三种创建方式">三种创建方式</h2>
-<ol>
+    <p>《剑指offer》刷题类型总结</p>
+<h2 id="数据结构类题目">数据结构类题目</h2>
+<ul>
 <li>
-<p>Thread class：继承Thread类(重点)，重写run()方法，创建一个线程对象，调用start()开启线程，线程不一定立即执行，cpu调度多线程</p>
+<p>LinkedList（链表类）</p>
+<ul>
+<li>003-从头到尾打印链表</li>
+<li>014-链表中倒数第k个结点</li>
+<li>015-反转链表</li>
+<li>016-合并两个或k个有序链表</li>
+<li>025-复杂链表的复制</li>
+<li>036-两个链表的第一个公共节点</li>
+<li>055-链表中环的入口节点</li>
+<li>056-删除链表中重复的节点</li>
+</ul>
 </li>
 <li>
-<p>Runnable接口：实现Runnable接口(重点)，重写run方法，创建runnable接口的实现类对象，创建线程对象，通过线程对象来开启我们的线程，代理，调用start方法</p>
-<p>new Thread(testThread3).start</p>
-<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%bb%a7%e6%89%bfThread%e7%b1%bb%e5%92%8c%e5%ae%9e%e7%8e%b0Runnable%e6%8e%a5%e5%8f%a3%e5%af%b9%e6%af%94.png" alt=""  /></p>
+<p>Tree（树）</p>
+<ul>
+<li>004-重建二叉树</li>
+<li>017-树的子结构</li>
+<li>018-二叉树的镜像</li>
+<li>022-从上往下打印二叉树</li>
+<li>023-二叉搜索树的后续遍历序列</li>
+<li><strong>026-二叉搜索树与双向链表</strong></li>
+<li>024-二叉树中和为某一值的路径</li>
+<li>038-二叉树的深度</li>
+<li>039-平衡二叉树</li>
+<li>057-二叉树的下一个节点</li>
+<li>058-对称的二叉树</li>
+<li>059-按之字形顺序打印二叉树</li>
+<li>060-把二叉树打印成多行</li>
+<li>061-序列化二叉树</li>
+<li>062-二叉搜索树的第k个节点</li>
+</ul>
 </li>
 <li>
-<p>Callable接口：实现Callable接口(了解)</p>
-<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e5%ae%9e%e7%8e%b0Callable%e6%8e%a5%e5%8f%a3.png" alt=""  /></p>
-<p>好处：可以定义返回值，可以跑出异常</p>
-</li>
-</ol>
-<p>多个线程操作同一个资源的情况下，线程不安全，数据紊乱</p>
-<h2 id="静态代理">静态代理</h2>
-<p>婚庆公司！</p>
-<p><strong>静态代理模式总结</strong>：</p>
-<p>真实对象和代理对象都要实现统一个接口，代理对象要代理真实角色</p>
-<p>代理对象可以做很多真实对象做不了的事情</p>
-<p>真实对象专注做自己的事情</p>
-<h2 id="lamda表达式">Lamda表达式</h2>
-<p>函数式 接口：</p>
-<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e5%87%bd%e6%95%b0%e5%bc%8f%e6%8e%a5%e5%8f%a3.png" alt=""  /></p>
-<p>Lamda表达式</p>
-<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5clamda%e8%a1%a8%e8%be%be%e5%bc%8f.png" alt=""  /></p>
-<h2 id="线程状态">线程状态</h2>
-<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e7%8a%b6%e6%80%81.png" alt=""  /></p>
-<ol>
-<li>
-<p><strong>线程停止</strong></p>
-<p>建议线程正常停止&mdash;&gt;利用次数，不建议死循环</p>
-<p>建议使用标志位&mdash;&gt;设置一个标志位</p>
-<p>不要使用stop或者destory等过时或者jdk不建议使用的方法。</p>
+<p>栈和队列</p>
+<ul>
+<li>005-用两个栈实现队列</li>
+<li>020-包含min函数的栈</li>
+<li>021-栈的压入、弹出序列</li>
+<li>044-翻转单词顺序列（栈)</li>
+<li>064-滑动窗口的最大值（双端队列）</li>
+</ul>
 </li>
 <li>
-<p><strong>线程休眠</strong></p>
-<p>sleep指定当前线程阻塞的毫秒数</p>
-<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e4%bc%91%e7%9c%a0sleep.png" alt=""  /></p>
+<p>Heap（堆）</p>
+<ul>
+<li><strong>029-最小的K个数</strong></li>
+</ul>
 </li>
 <li>
-<p><strong>线程礼让——yield</strong></p>
-<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e7%a4%bc%e8%ae%a9.png" alt=""  /></p>
+<p>哈希表</p>
+<ul>
+<li>034-第一个只出现一次的字符</li>
+</ul>
 </li>
 <li>
-<p><strong>线程强制执行——join</strong></p>
-<p>想象为插队</p>
-<p><img src="D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e5%bc%ba%e5%88%b6%e6%89%a7%e8%a1%8c.png" alt=""  /></p>
+<p>图</p>
+<ul>
+<li>065-矩阵中的路径（BFS）</li>
+<li>066-机器人的运动范围（DFS）</li>
+</ul>
 </li>
-</ol>
+</ul>
+<h2 id="具体算法类题目">具体算法类题目</h2>
+<ul>
+<li>
+<p>斐波那契数列</p>
+<ul>
+<li>007-斐波那契数列</li>
+<li>008-跳台阶</li>
+<li>009-变态跳台阶</li>
+<li>010-矩形覆盖</li>
+</ul>
+</li>
+<li>
+<p>搜索算法</p>
+<ul>
+<li>001-二维数组的查找</li>
+<li>006-旋转数组的最小数字（二分查找）</li>
+<li>037-数字在排序数组中出现的次数（二分查找）</li>
+</ul>
+</li>
+<li>
+<p>全排列</p>
+<ul>
+<li>027-字符串的排列</li>
+</ul>
+</li>
+<li>
+<p>动态规划</p>
+<ul>
+<li>030-连续子数组的最大和</li>
+<li>052-正则表达式匹配（暴力解法）</li>
+</ul>
+</li>
+<li>
+<p>回溯</p>
+<ul>
+<li>065-矩阵中的路径（BFS）</li>
+<li>066-机器人的运动范围（DFS）</li>
+</ul>
+</li>
+<li>
+<p>排序</p>
+<ul>
+<li>035-数组中的逆序对（归并排序）</li>
+<li><strong>029-最小的K个数（堆排序）</strong></li>
+<li><strong>029-最小的K个数（快速排序）</strong></li>
+</ul>
+</li>
+<li>
+<p>位运算</p>
+<ul>
+<li>011-二进制中1的个数</li>
+<li>012-数值的整数次方</li>
+<li>040-数组中只出现一次的数字</li>
+</ul>
+</li>
+<li>
+<p>其他算法</p>
+<ul>
+<li>002-替换空格</li>
+<li>013-调整数组顺序使奇数位于偶数前面</li>
+<li>028-数组中出现次数超过一半的数字</li>
+<li>031-数组中1出现的次数（从1到n整数中1出现的次数）</li>
+<li>032-把数组排成最小的数</li>
+<li>033-丑数</li>
+<li>041-和为S的连续整数序列（滑动窗口的思想）</li>
+<li>042-和为S的两个数字（双指针思想）</li>
+<li>043-左旋转字符串（矩阵翻转）</li>
+<li>046-孩子们的游戏-圆圈中最后剩下的数（约瑟夫环）</li>
+<li>051-构建乘积数组</li>
+</ul>
+</li>
+</ul>
 
 </section>
 
@@ -237,73 +297,7 @@
     
 </article>
 
-    <aside class="related-contents--wrapper">
-    
-    
-        <h2 class="section-title">相关文章</h2>
-        <div class="related-contents">
-            <div class="flex article-list--tile">
-                
-                    
-<article class="has-image">
-    <a href="https://a447593787.github.io/p/test-chinese/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="helena-hertz-wWZzXlDpMog-unsplash.jpg" loading="lazy" data-key="test-chinese" data-hash="helena-hertz-wWZzXlDpMog-unsplash.jpg"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">java多线程入门</h2>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="has-image">
-    <a href="https://a447593787.github.io/p/placeholder-text/">
-        
-        
-            <div class="article-image">
-                <img src="/p/placeholder-text/matt-le-SJSpo9hQf7s-unsplash_hu958d513eeefe5556a31d065479ecc5ac_14205_250x150_fill_q75_box_smart1.jpg" width="250" height="150" 
-                        loading="lazy" data-key="" data-hash="md5-jq4GZk3fs&#43;jcbgAHVstwOw==">
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Placeholder Text</h2>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="has-image">
-    <a href="https://a447593787.github.io/p/emoji-support/">
-        
-        
-            <div class="article-image">
-                <img src="/p/emoji-support/the-creative-exchange-d2zvqp3fpro-unsplash_huf941de4769045cdfa8c9ee7036519a2a_35369_250x150_fill_q75_box_smart1.jpg" width="250" height="150" 
-                        loading="lazy" data-key="" data-hash="md5-YBFrHM/IYy6aZffVHfPvwg==">
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Emoji Support</h2>
-        </div>
-    </a>
-</article>
-                
-            </div>
-        </div>
-    
-</aside>
-
-    
+     
         
     <div class="disqus-container">
     <div id="disqus_thread"></div>
@@ -348,6 +342,8 @@
         <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
 
     
@@ -410,6 +406,7 @@
     </div>
 
 </div>
+
             </main>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
