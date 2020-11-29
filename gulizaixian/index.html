@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='网课在线教育平台项目总结 1、网课在线教育平台项目功能点 ​	微服务架构
+​	跨域注解@CrossOrigin
+​	spring.cloud.gateway.route：配置网关
+​	课程跟电商的差别，电商要统计数量，课程不需要统计数量，只需要购买，数量固定为1.无需重复购买
+ ### 一、准备  把后端接口启动起来 启动前端项目（前台系统和后台系统）  二、项目后台管理系统功能（B2C模式）   登录功能
+  权限管理功能（重点）
+ 菜单管理：列表、添加、修改、删除 （管理功能） 角色管理：列表、添加、修改、删除、批量删除、为角色分配菜单 用户管理：列表、添加、修改、删除、批量删除、为用户分配角色 权限管理表和关系：使用五张表（菜单表、菜单角色表、角色表、角色用户表、用户表）    讲师管理模块
+ 条件查询分页列表，添加、修改、删除。    课程分类功能
+  添加课程分类
+  课程分类列表
+使用树形结构显示课程分类列表
+    课程管理模块
+  课程列表功能
+  添加课程功能（重点）
+课程发布流程：第一步填写课程基本信息，第二步添加课程大纲（章节和小节），第三步课程信息确认，最终课程发布。
+问题：
+如何判断课程是否已经被发布了？
+答：status字段进行判定
+课程添加的过程中，中途把课程停止添加，重新去添加新的课程，如何找到之前没有发布完成的课程，继续进行发布？
+答：先来到课程列表中，根据status字段找到未发布的课程，有编辑课程基本信息功能，编辑课程大纲信息功能，删除课程信息功能等，继续发布课程信息。
+  添加小节上传课程视频
+阿里云视频点播
+    统计分析模块'><title></title>
+    
+    <link rel='canonical' href='https://a447593787.github.io/gulizaixian/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content=''>
+<meta property='og:description' content='网课在线教育平台项目总结 1、网课在线教育平台项目功能点 ​	微服务架构
+​	跨域注解@CrossOrigin
+​	spring.cloud.gateway.route：配置网关
+​	课程跟电商的差别，电商要统计数量，课程不需要统计数量，只需要购买，数量固定为1.无需重复购买
+ ### 一、准备  把后端接口启动起来 启动前端项目（前台系统和后台系统）  二、项目后台管理系统功能（B2C模式）   登录功能
+  权限管理功能（重点）
+ 菜单管理：列表、添加、修改、删除 （管理功能） 角色管理：列表、添加、修改、删除、批量删除、为角色分配菜单 用户管理：列表、添加、修改、删除、批量删除、为用户分配角色 权限管理表和关系：使用五张表（菜单表、菜单角色表、角色表、角色用户表、用户表）    讲师管理模块
+ 条件查询分页列表，添加、修改、删除。    课程分类功能
+  添加课程分类
+  课程分类列表
+使用树形结构显示课程分类列表
+    课程管理模块
+  课程列表功能
+  添加课程功能（重点）
+课程发布流程：第一步填写课程基本信息，第二步添加课程大纲（章节和小节），第三步课程信息确认，最终课程发布。
+问题：
+如何判断课程是否已经被发布了？
+答：status字段进行判定
+课程添加的过程中，中途把课程停止添加，重新去添加新的课程，如何找到之前没有发布完成的课程，继续进行发布？
+答：先来到课程列表中，根据status字段找到未发布的课程，有编辑课程基本信息功能，编辑课程大纲信息功能，删除课程信息功能等，继续发布课程信息。
+  添加小节上传课程视频
+阿里云视频点播
+    统计分析模块'>
+<meta property='og:url' content='https://a447593787.github.io/gulizaixian/'>
+<meta property='og:site_name' content='Weiliang Lin'>
+<meta property='og:type' content='article'><meta property='article:section' content='' />
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="网课在线教育平台项目总结 1、网课在线教育平台项目功能点 ​	微服务架构
+​	跨域注解@CrossOrigin
+​	spring.cloud.gateway.route：配置网关
+​	课程跟电商的差别，电商要统计数量，课程不需要统计数量，只需要购买，数量固定为1.无需重复购买
+ ### 一、准备  把后端接口启动起来 启动前端项目（前台系统和后台系统）  二、项目后台管理系统功能（B2C模式）   登录功能
+  权限管理功能（重点）
+ 菜单管理：列表、添加、修改、删除 （管理功能） 角色管理：列表、添加、修改、删除、批量删除、为角色分配菜单 用户管理：列表、添加、修改、删除、批量删除、为用户分配角色 权限管理表和关系：使用五张表（菜单表、菜单角色表、角色表、角色用户表、用户表）    讲师管理模块
+ 条件查询分页列表，添加、修改、删除。    课程分类功能
+  添加课程分类
+  课程分类列表
+使用树形结构显示课程分类列表
+    课程管理模块
+  课程列表功能
+  添加课程功能（重点）
+课程发布流程：第一步填写课程基本信息，第二步添加课程大纲（章节和小节），第三步课程信息确认，最终课程发布。
+问题：
+如何判断课程是否已经被发布了？
+答：status字段进行判定
+课程添加的过程中，中途把课程停止添加，重新去添加新的课程，如何找到之前没有发布完成的课程，继续进行发布？
+答：先来到课程列表中，根据status字段找到未发布的课程，有编辑课程基本信息功能，编辑课程大纲信息功能，删除课程信息功能等，继续发布课程信息。
+  添加小节上传课程视频
+阿里云视频点播
+    统计分析模块"></head><body class="article-page keep-sidebar">
+        <div class="container flex on-phone--column align-items--flex-start extended ">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+
+                
+                    
+                    <img src="/img/avatar_hu845b293eecd45ac4681077b7c8b17649_46149_300x300_resize_box_2.png" width="300"
+                        height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+
+                <span class="emoji">🍥</span>
+            </figure>
+        
+        <h1 class="site-name"><a href="https://a447593787.github.io/">Weiliang Lin</a></h1>
+        <h2 class="site-description">Ysu Lin Wei Liang&#39;s personal blog</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="https://a447593787.github.io/gulizaixian/"></a>
+    </h2>
+
+    </div>
+</header>
+
+    <section class="article-content">
+    <h1 id="网课在线教育平台项目总结">网课在线教育平台项目总结</h1>
+<h2 id="1网课在线教育平台项目功能点">1、网课在线教育平台项目功能点</h2>
+<p>​		微服务架构</p>
+<p>​		跨域注解@CrossOrigin</p>
+<p>​		spring.cloud.gateway.route：配置网关</p>
+<p>​		课程跟电商的差别，电商要统计数量，课程不需要统计数量，只需要购买，数量固定为1.无需重复购买</p>
+<pre><code>    ### 一、准备
+</code></pre>
+<ol>
+<li>把后端接口启动起来</li>
+<li>启动前端项目（前台系统和后台系统）</li>
+</ol>
+<h3 id="二项目后台管理系统功能b2c模式">二、项目后台管理系统功能（B2C模式）</h3>
+<ol>
+<li>
+<p>登录功能</p>
+</li>
+<li>
+<p>权限管理功能（重点）</p>
+<ol>
+<li>菜单管理：列表、添加、修改、删除  （管理功能）</li>
+<li>角色管理：列表、添加、修改、删除、批量删除、为角色分配菜单</li>
+<li>用户管理：列表、添加、修改、删除、批量删除、为用户分配角色</li>
+<li>权限管理表和关系：使用五张表（菜单表、菜单角色表、角色表、角色用户表、用户表）</li>
+</ol>
+</li>
+<li>
+<p>讲师管理模块</p>
+<ol>
+<li>条件查询分页列表，添加、修改、删除。</li>
+</ol>
+</li>
+<li>
+<p>课程分类功能</p>
+<ol>
+<li>
+<p>添加课程分类</p>
+</li>
+<li>
+<p>课程分类列表</p>
+<p>使用树形结构显示课程分类列表</p>
+</li>
+</ol>
+</li>
+<li>
+<p>课程管理模块</p>
+<ol>
+<li>
+<p>课程列表功能</p>
+</li>
+<li>
+<p>添加课程功能（重点）</p>
+<p>课程发布流程：第一步填写课程基本信息，第二步添加课程大纲（章节和小节），第三步课程信息确认，最终课程发布。</p>
+<p>问题：</p>
+<p>如何判断课程是否已经被发布了？</p>
+<p>答：status字段进行判定</p>
+<p>课程添加的过程中，中途把课程停止添加，重新去添加新的课程，如何找到之前没有发布完成的课程，继续进行发布？</p>
+<p>答：先来到课程列表中，根据status字段找到未发布的课程，有编辑课程基本信息功能，编辑课程大纲信息功能，删除课程信息功能等，继续发布课程信息。</p>
+</li>
+<li>
+<p>添加小节上传课程视频</p>
+<p>阿里云视频点播</p>
+</li>
+</ol>
+</li>
+<li>
+<p>统计分析模块</p>
+<ol>
+<li>生成统计数据</li>
+<li>统计数据图表显示</li>
+</ol>
+</li>
+</ol>
+<h3 id="三项目前台用户系统功能">三、项目前台用户系统功能</h3>
+<ol>
+<li>
+<p>首页数据显示</p>
+<ol>
+<li>首页显示幻灯片功能（根据新加入的课程和播放量选择）</li>
+<li>显示热门课程（根据播放量来选择）</li>
+<li>显示名师（根据新增名师和名师课程播放量来选择）</li>
+</ol>
+</li>
+<li>
+<p>注册功能</p>
+<ol>
+<li>获取手机的验证码</li>
+</ol>
+</li>
+<li>
+<p>登录功能</p>
+<ol>
+<li>
+<p>普通的登录（<strong>单点登录重中之重</strong>）</p>
+<p>SSO（单点登录）：很常见的问题</p>
+<p>使用token实现：JWT，使用JWT生成token字符串，</p>
+<p>JWT有三部分组成：</p>
+<p>第一部分：JWT头信息</p>
+<p>第二部分：有效载荷，包含主体信息（用户信息）</p>
+<p>第三部分：签名哈希，防伪标志</p>
+<p>登录实现流程：</p>
+<ol>
+<li>调用登录接口返回token字符串，把返回token字符串放到cookie里面，创建前端拦截器进行判断，如果cookie里面包含token字符串，把token字符串放到header（请求头）里面。调用接口根据token获取用户信息，把用户信息放到cookie里面进行显示。</li>
+</ol>
+</li>
+<li>
+<p>微信扫码登录（重点）</p>
+<ol>
+<li>
+<p>OAuth2</p>
+<p>是针对特定问题的解决方案</p>
+<p>主要有两个问题：开放系统间（软件）授权、分布式访问</p>
+</li>
+<li>
+<p>如何获取扫描人信息过程？</p>
+<ol>
+<li>扫描之后微信接口返回code（临时票据）</li>
+<li>拿着code值请求微信固定地址，得到两个值，access token（访问凭证）和openid（微信唯一标识），你拿着这两个值再去请求微信固定的地址，得到微信扫描人的信息（比如昵称，头像等等）。</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>名师列表功能</p>
+</li>
+<li>
+<p>名师详情功能</p>
+</li>
+<li>
+<p>课程列表功能</p>
+<ol>
+<li>条件查询分页列表功能</li>
+</ol>
+</li>
+<li>
+<p>课程详情页面功能</p>
+<ol>
+<li>课程信息显示（包含课程基本信息、分类、讲师、课程大纲）</li>
+<li>判断课程是否需要购买</li>
+</ol>
+</li>
+<li>
+<p>课程视频在线播放</p>
+<p>整合阿里云视频点播功能。</p>
+</li>
+<li>
+<p>课程支付功能（微信支付）</p>
+<ol>
+<li>
+<p>生成课程订单</p>
+</li>
+<li>
+<p>生成微信支付二维码</p>
+</li>
+<li>
+<p>微信最终支付</p>
+<p>微信支付实现流程：（<strong>重点</strong>）</p>
+<ol>
+<li>如果说课程是收费课程，点击立即购买，生成课程订单</li>
+<li>点击订单页面去支付，生成微信支付二维码</li>
+<li>使用微信扫描支付二维码实现支付</li>
+<li>支付之后，每隔3秒钟查询支付状态，status字段（订单状态）如果没有支付成功等待，如果支付成功之后，更新订单状态（已经支付状态），向支付记录表添加支付成功记录。</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="2网课在线教育项目技术点">2、网课在线教育项目技术点</h2>
+<h3 id="一在线教育项目采用前后端分离开发">一、在线教育项目采用前后端分离开发</h3>
+<h3 id="二项目使用前端技术">二、项目使用前端技术</h3>
+<ol>
+<li>
+<p>Vue</p>
+<p>基本语法：
+常见指令：v-bind  v-model  v-if  v-for  v-html</p>
+<p>绑定事件：v-onclick</p>
+<p>生命周期：created()   ：在页面渲染之前执行</p>
+<p>​				  mounted() ：在页面渲染之后执行</p>
+<p>ES6规范</p>
+</li>
+<li>
+<p>Element-ui</p>
+</li>
+<li>
+<p>node.js</p>
+<p>是JavaScript运行环境，不需要浏览器直接运行js代码，模拟服务器效果。</p>
+</li>
+<li>
+<p>NPM</p>
+<p>包管理工具，类似于Maven。</p>
+<p>npm命令：npm init</p>
+<p>​					npm install 依赖名称</p>
+</li>
+<li>
+<p>Babel</p>
+<p>转码器，可以把ES6代码转换成ES5代码。</p>
+</li>
+<li>
+<p>前端模块化</p>
+<p>通过一个页面或者一个js文件，调用另外一个js文件里面的方法。</p>
+<p>问题：Es6的模块化未发在node.js中执行，需要Babel编辑成ES5后再执行。</p>
+</li>
+<li>
+<p>后台系统使用vue-admin-template</p>
+<p>基于vue + Element-ui</p>
+</li>
+<li>
+<p>前台系统使用Nuxt</p>
+<p>基于vue</p>
+<p>服务端渲染技术</p>
+</li>
+<li>
+<p>Echarts</p>
+<p>图表工具</p>
+</li>
+</ol>
+<h3 id="三项目使用后端技术重点">三、项目使用后端技术（重点）</h3>
+<ol>
+<li>
+<p>微服务架构</p>
+</li>
+<li>
+<p>SpringBoot</p>
+<ol>
+<li>
+<p>SpringBoot本质就是Spring，只是快速构建Spring工程脚手架</p>
+</li>
+<li>
+<p>细节：</p>
+<ul>
+<li>启动类包扫描机制</li>
+<li>设置扫描规则@ComponentScan(“包路径”)</li>
+<li>配置类</li>
+</ul>
+</li>
+<li>
+<p>SpringBoot配置文件</p>
+<p>配置文件类型：properties和yml  （大部分）</p>
+<p>配置文件加载顺序：bootstrap   application   application-dev</p>
+</li>
+</ol>
+</li>
+<li>
+<p>SpringCloud</p>
+<ol>
+<li>
+<p>是很多框架的总称，使用这些框架实现微服务架构，基于SpringBoot实现</p>
+</li>
+<li>
+<p>组成框架有哪些</p>
+<ul>
+<li>服务发现：Netflix Eureka （Nacos）</li>
+<li>服务调用：Netflix Feign</li>
+<li>熔断器：Netflix Hystrix</li>
+<li>服务网关：Spring Cloud GateWay</li>
+<li>分布式配置：Spring Cloud Config （Nacos)</li>
+<li>消息总线：Spring Cloud Bus（Nacos）</li>
+</ul>
+</li>
+<li>
+<p>项目中使用阿里巴巴Nacos，替代SpringCloud中的一些组件</p>
+</li>
+<li>
+<p>Nacos</p>
+<p>使用Nacos作为注册中心</p>
+<p>使用Nacos作为配置中心</p>
+</li>
+<li>
+<p>Feign</p>
+<p>服务调用：一个微服务调用另外一个微服务（课程中调用订单功能，看课程是否已经购买）</p>
+</li>
+<li>
+<p>熔断器</p>
+<p>（容错处理）调用服务超时或者连接服务器超时</p>
+</li>
+<li>
+<p>Gateway</p>
+<p>SpringCloud之前zuul网关，目前Gateway网关</p>
+</li>
+</ol>
+</li>
+<li>
+<p>MyBatisPlus</p>
+<ol>
+<li>MyBatisPlus就是对MyBatis做增强</li>
+<li>自动填充</li>
+<li>乐观锁</li>
+<li>逻辑删除</li>
+<li>代码生成器</li>
+</ol>
+</li>
+<li>
+<p>EasyExcel</p>
+<ol>
+<li>阿里巴巴提供做错excel工具，代码简洁，效率很高</li>
+<li>EasyExcel对poi进行封装，采用SAX方式解析</li>
+<li>项目应用在添加课程分类，读取Excel数据</li>
+</ol>
+</li>
+</ol>
+<h3 id="四项目后端技术二">四、项目后端技术（二）</h3>
+<ol>
+<li>Spring Security（重点、牢牢记住）
+<ul>
+<li>项目整合实现权限管理功能</li>
+<li>SpringSecurity框架组成，认证和授权</li>
+<li>SpringSecurity登录认证过程</li>
+<li>SpringSecurity代码执行过程</li>
+</ul>
+</li>
+<li>Redis（重点）
+<ul>
+<li>首页面数据通过Redis进行缓存</li>
+<li>Redis数据类型（！！！！）</li>
+<li>使用Redis作为缓存，什么样的数据适合使用Redis作为缓存，不太重要或者不经常改变数据适合放到Redis中作为缓存</li>
+</ul>
+</li>
+<li>Nginx（重点）
+<ul>
+<li>反向代理服务器</li>
+<li>请求转发，负载均衡、动静分离</li>
+</ul>
+</li>
+<li>OAuth2+JWT
+<ul>
+<li>OAuth2针对特定问题的解决方案</li>
+<li>JWT包含三部分</li>
+</ul>
+</li>
+<li>HttpClient
+<ul>
+<li>发送请求返回相应的工具，不需要浏览器完成请求和响应的过程</li>
+<li>应用场景：微信登录获取扫描人的信息，微信支付查询支付状态</li>
+</ul>
+</li>
+<li>Cookie
+<ul>
+<li>Cookie：客户端技术、每次发送请求带着Cookie值进行发送</li>
+<li>Cookie：有默认有效市场，关闭浏览器Cookie默认不存在了，可以设置Cookie有效时长（setMaxage）</li>
+</ul>
+</li>
+<li>微信登录</li>
+<li>微信支付</li>
+<li>阿里云OSS
+<ul>
+<li>文件存储服务器</li>
+<li>添加讲师时候上传讲师头像</li>
+</ul>
+</li>
+<li>阿里云视频点播
+<ul>
+<li>视频上传、删除、播放</li>
+<li>整合阿里云视频播放器进行视频播放</li>
+<li>使用视频播放凭证</li>
+</ul>
+</li>
+<li>阿里云短信服务
+<ul>
+<li>注册时候，发送手机验证码</li>
+</ul>
+</li>
+<li>Git
+<ul>
+<li>版本控制</li>
+<li>代码提交到远程Git仓库</li>
+</ul>
+</li>
+<li>Docker</li>
+<li>jenkins</li>
+</ol>
+<h2 id="3网课在线教育项目问题">3、网课在线教育项目问题</h2>
+<ol>
+<li>
+<p>前端问题-路由切换问题</p>
+<ol>
+<li>
+<p>多次路由跳转到同一个vue页面，页面中的created方法只会执行一次</p>
+<p>解决方案：使用vue监听机制watch $ route(to, from)</p>
+</li>
+</ol>
+</li>
+<li>
+<p>前端问题-ES6模块运行化问题</p>
+<ol>
+<li>Node.js不能直接运行ES6模块化代码，使用Babel把ES6模块化代码转换ES5代码执行</li>
+</ol>
+</li>
+<li>
+<p>mp生成19位id值</p>
+<ol>
+<li>
+<p>mp生成id值是19位，JavaScript处理数字类型值的时候，只会处理到16位</p>
+<p>@TableId(value  = &ldquo;id&rdquo;, type = IdType.ID_WORKER_STR)</p>
+</li>
+</ol>
+</li>
+<li>
+<p>跨域问题</p>
+<ol>
+<li>
+<p>访问协议，ip地址，端口号，这三个如果有任何一个不一样，产生跨域问题</p>
+</li>
+<li>
+<p>跨域解决</p>
+<p>在Controller添加注解</p>
+<p>通过网关解决</p>
+</li>
+</ol>
+</li>
+<li>
+<p>413问题</p>
+<ol>
+<li>上传视频时候，因为Nginx有上传文件大小限制，如果超过Nginx大小，出现413</li>
+<li>413错误：请求体过大</li>
+<li>在Nginx配置客户端大小 client_max_body_size</li>
+<li>响应状态码：413,403,302</li>
+</ol>
+</li>
+<li>
+<p>Maven加载问题</p>
+<ol>
+<li>
+<p>maven加载项目时候，默认不会加载src-java文件夹里面xml文件（mapper.xml文件）</p>
+<p>解决方案：</p>
+<ul>
+<li>
+<p>直接复制xml文件到target目录</p>
+</li>
+<li>
+<p>通过修改配置文件application.properties实现 mybatis-plus.mapper-locations=&hellip;&hellip;</p>
+<p>然后在pom.xml中加上src-main-java的扫描</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="4项目描述">4、项目描述</h2>
+<ol>
+<li>
+<p>在线教育项目采用B2C商业模块，使用微服务架构，项目采用前后端分离开发</p>
+</li>
+<li>
+<p>项目功能模块：你做的模块</p>
+<p>在线教育项目分为前台系统</p>
+<p>前台系统包含：首页数据显示、课程列表和详情、课程支付、课程视频播放、微信登录、微信支付等等。</p>
+<p>后台系统包含：权限管理、课程管理、统计分析、课程分类管理等等。</p>
+<p>我在这个项目，主要负责前台微信登录和支付，负责后台权限管理和统计分析</p>
+</li>
+<li>
+<p>项目涉及技术：</p>
+<p>因为我们项目采用前后端分离开发</p>
+<p>前端技术包含：vue、elemet-ui、nuxt、babel等等</p>
+<p>后端技术包含：SpringBoot、SpringCloud（）、EasyExcel等等</p>
+<p>第三方技术包含：阿里云OSS、视频点播、短信服务等等。</p>
+<p>标准公司：Apache</p>
+<p>服务公司：阿里云</p>
+<p>产品公司：用友</p>
+<p>项目公司：小公司</p>
+</li>
+<li>
+<p>一个中大型项目的开发流程</p>
+<ol>
+<li>需求调研（产品经理）</li>
+<li>需求评审（产品/设计/前端/后端/测试/运营/）</li>
+<li>立项（项目经理、品管）</li>
+<li>UI设计</li>
+<li>开发
+<ul>
+<li>架构、数据库设计、API文档、MOCK数据开发、开发、单元测试</li>
+<li>前端</li>
+<li>后端</li>
+</ul>
+</li>
+<li>前端后端联调</li>
+<li>项目提测：黑盒白盒、压力测试（qps） loadrunner</li>
+<li>bug修改</li>
+<li>回归测试</li>
+<li>运维和部署上线</li>
+</ol>
+</li>
+<li>
+<p>系统中都有哪些角色？数据库是怎么设计的？</p>
+<p>前台：会员（学员）</p>
+<p>后台：系统管理员、运营人员</p>
+<p>后台分库，每个微服务一个独立的数据库，使用了分布式id生成器</p>
+</li>
+<li>
+<p>视频点播是怎么实现的（流媒体你们是怎么实现的）</p>
+<p>我们直接介入了阿里云的视频点播。云平台上的功能包括视频上传、转码、加密、智能审核、监控统计等。</p>
+<p>还包括视频播放功能，阿里云还提供了一个视频播放器。</p>
+</li>
+<li>
+<p>前后端联调经常遇到的问题：</p>
+<ol>
+<li>
+<p>请求方式post、get。</p>
+</li>
+<li>
+<p>jsom、x-wwww-form-urlencoded混乱的错误</p>
+</li>
+<li>
+<p>后台必要的参数，前端省略了</p>
+</li>
+<li>
+<p>数据类型不匹配</p>
+</li>
+<li>
+<p>空指针异常</p>
+</li>
+<li>
+<p>分布式系统中分布式id生成的id长度过大（19字符长度的整数），js无法解析（js只能解析16个长度：2的53次幂）</p>
+<p>分布式id生成器在前端无法处理，总是在后三位进行四舍五入。</p>
+<p>分布式id生成器生成的id是19个字符的长度，前端javascript脚本对整数的处理能力只有2的53次方，也就是最多只能处理16个字符。</p>
+<p>解决方案是吧id在程序中设置成了字符串性质，id策略改成ID_WORKER_STR</p>
+</li>
+<li>
+<p>zookeeper控制中心</p>
+</li>
+</ol>
+</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">&copy; 2020 Weiliang Lin</section>
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.0.5">Stack</a></b> designed by
+        <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>
