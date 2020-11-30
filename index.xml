@@ -6,13 +6,629 @@
         <description>Recent content on Weiliang Lin</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 29 Nov 2020 15:38:53 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>SGnet</title>
-        <link>https://a447593787.github.io/p/sgnet/</link>
+        <lastBuildDate>Mon, 30 Nov 2020 21:13:29 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>JVM</title>
+        <link>https://a447593787.github.io/p/jvm/</link>
+        <pubDate>Mon, 30 Nov 2020 21:13:29 +0800</pubDate>
+        
+        <guid>https://a447593787.github.io/p/jvm/</guid>
+        <description>&lt;img src="https://a447593787.github.io/p/jvm/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post JVM" /&gt;&lt;h1 id=&#34;jvm虚拟机&#34;&gt;JVM虚拟机&lt;/h1&gt;
+&lt;h2 id=&#34;java内存分析&#34;&gt;JAVA内存分析&lt;/h2&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90.png&#34; data-size=&#34;1002x463&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90_hu9880e467927bca6d340b1a295908cc97_17496_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90_hu9880e467927bca6d340b1a295908cc97_17496_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90.png&#34; width=&#34;1002&#34; height=&#34;463&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;第一步，JVM去方法区寻找Test类的代码信息，如果有直接调用，没有的话使用类的加载机制把类加载进来。同时把静态变量、静态方法、常量加载进来。这里加载的是（“冯冬冬的IT技术栈”，“冯XX”）；这是因为字符串是常量，age中的18是基本类型。
+第二步，jvm进入main方法，看到Person person=new Person()。首先分析Person这个类，同样的寻找Person类的代码信息，有就加载，没有的话类加载机制加载进来。同时也加载静态变量、静态方法、常量（“我正在走路。。。”）
+第三步，jvm接下来看到了person，person在main方法内部，因而是局部变量，存放在栈空间中。
+第四步，jvm接下来看到了new Person()。new出的对象（实例），存放在堆空间中。&lt;/p&gt;
+&lt;p&gt;第五步，jvm接下来看到了“=”，把new Person的地址告诉person变量，person通过四字节的地址（十六进制），引用该实例。 是不是有点晕，别着急，画个图看一下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cJAVA%5cJAVA%e5%88%9b%e5%bb%ba%e5%af%b9%e8%b1%a1%e5%86%85%e5%ad%98%e5%88%86%e6%9e%901.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;第六步，jvm看到person.name = “冯冬冬的IT技术栈”;person通过引用new Person实例的name属性，该name属性通过地址指向常量池的&amp;quot;冯冬冬的IT技术栈&amp;quot;。 第七步，jvm看到person.age = 18; person的age属性是基本数据类型，直接赋值。&lt;/p&gt;
+&lt;p&gt;第八步，jvm看到person.walk(); 调用实例的方法时，并不会在实例对象中生成一个新的方法，而是通过地址指向方法区中类信息的方法。走到这一步再看看图怎么变化的&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/JAVA%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%88%86%E6%9E%902.png&#34; data-size=&#34;910x556&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/JAVA%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%88%86%E6%9E%902_hu9ed725fe3550e3cf5e726f19f9853858_33914_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/JAVA%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%88%86%E6%9E%902_hu9ed725fe3550e3cf5e726f19f9853858_33914_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/JAVA%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%88%86%E6%9E%902.png&#34; width=&#34;910&#34; height=&#34;556&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;JVM的位置&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/JVM%E7%9A%84%E4%BD%8D%E7%BD%AE.jpg&#34; data-size=&#34;550x498&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/JVM%E7%9A%84%E4%BD%8D%E7%BD%AE_hubc9c696370334efdbd6d8f60e8b05a09_20408_480x0_resize_q75_box.jpg 480w, https://a447593787.github.io/p/jvm/JVM%E7%9A%84%E4%BD%8D%E7%BD%AE_hubc9c696370334efdbd6d8f60e8b05a09_20408_1024x0_resize_q75_box.jpg 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/JVM%E7%9A%84%E4%BD%8D%E7%BD%AE.jpg&#34; width=&#34;550&#34; height=&#34;498&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/JVM%E6%9E%B6%E6%9E%84%E5%9B%BE%E8%AF%A6%E7%BB%86.png&#34; data-size=&#34;787x777&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/JVM%E6%9E%B6%E6%9E%84%E5%9B%BE%E8%AF%A6%E7%BB%86_hu8077d43e157bb235bcec0449b7ff49d0_274130_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/JVM%E6%9E%B6%E6%9E%84%E5%9B%BE%E8%AF%A6%E7%BB%86_hu8077d43e157bb235bcec0449b7ff49d0_274130_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/JVM%E6%9E%B6%E6%9E%84%E5%9B%BE%E8%AF%A6%E7%BB%86.png&#34; width=&#34;787&#34; height=&#34;777&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;JVM的体系结构&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/JVM%E4%BD%93%E7%B3%BB.png&#34; data-size=&#34;644x652&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/JVM%E4%BD%93%E7%B3%BB_hu62cc4e26c37ce3bee4fd5d6350710acf_40012_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/JVM%E4%BD%93%E7%B3%BB_hu62cc4e26c37ce3bee4fd5d6350710acf_40012_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/JVM%E4%BD%93%E7%B3%BB.png&#34; width=&#34;644&#34; height=&#34;652&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;类加载器&lt;/p&gt;
+&lt;p&gt;作用：加载Class文件 new Student()；&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.png&#34; data-size=&#34;599x482&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8_hu99041c6fe46ed9aadd3a749aef0c8846_24610_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8_hu99041c6fe46ed9aadd3a749aef0c8846_24610_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.png&#34; width=&#34;599&#34; height=&#34;482&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;虚拟机自带的加载器&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;启动类加载器&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;扩展类加载器EXC&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;应用程序加载器APP&lt;/p&gt;
+&lt;p&gt;优先级从高到低，先调用高级的，没有就抛出异常&lt;/p&gt;
+&lt;p&gt;双亲委派机制：安全&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;APP&amp;ndash;&amp;gt;EXC&amp;ndash;&amp;gt;BOOT(最终执行)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;类加载器加载机制：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;类加载器收到类加载的请求&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将这个请求向上委托给父类加载器去完成，一直向上委托，直到启动类加载器&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;启动加载器检查是否能够加载当前这个类，能加载就结束，使用当前的加载器，否则抛出异常，通知子加载器加载&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;重复步骤&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;双亲委派机制&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;沙箱安全机制（例如WIN10管理员权限机制）（&lt;strong&gt;重要的是双亲委派机制&lt;/strong&gt;）&lt;/p&gt;
+&lt;p&gt;​		Java安全模型的核心就是Java沙箱（sandbox），什么是沙箱？沙箱是一个限制程序运行的环境。沙箱机制就是将 Java 代码限定在虚拟机(JVM)特定的运行范围中，并且严格限制代码对本地系统资源访问，通过这样的措施来保证对代码的有效隔离，防止对本地系统造成破坏。沙箱&lt;strong&gt;主要限制系统资源访问&lt;/strong&gt;，那系统资源包括什么？——&lt;code&gt;CPU、内存、文件系统、网络&lt;/code&gt;。不同级别的沙箱对这些资源访问的限制也可以不一样。&lt;/p&gt;
+&lt;p&gt;  所有的Java程序运行都可以指定沙箱，可以定制安全策略。&lt;/p&gt;
+&lt;p&gt;​		当前最新的安全机制实现，则引入了域 (Domain) 的概念。虚拟机会把所有代码加载到不同的系统域和应用域，系统域部分专门负责与关键资源进行交互，而各个应用域部分则通过系统域的部分代理来对各种需要的资源进行访问。虚拟机中不同的受保护域 (Protected Domain)，对应不一样的权限 (Permission)。存在于不同域中的类文件就具有了当前域的全部权限，如下图所示 最新的安全模型(jdk 1.6)&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E6%B2%99%E7%AE%B1%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6.png&#34; data-size=&#34;414x262&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E6%B2%99%E7%AE%B1%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6_hue9f2f5031cc863a41cfbe69c83a51caa_17528_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E6%B2%99%E7%AE%B1%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6_hue9f2f5031cc863a41cfbe69c83a51caa_17528_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E6%B2%99%E7%AE%B1%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6.png&#34; width=&#34;414&#34; height=&#34;262&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;  类装载器采用的机制是双亲委派模式。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;从最内层JVM自带类加载器开始加载，外层恶意同名类得不到加载从而无法使用；&lt;/li&gt;
+&lt;li&gt;由于严格通过包来区分了访问域，外层恶意的类通过内置代码也无法获得权限访问到内层类，破坏代码就自然无法生效。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;存取控制器&lt;/code&gt;（access controller）：存取控制器可以控制核心API对操作系统的存取权限，而这个控制的策略设定，可以由用户指定。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;安全管理器&lt;/code&gt;（security manager）：是核心API和操作系统之间的主要接口。实现权限控制，比存取控制器优先级高。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;pre&gt;&lt;code&gt;安全软件包
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;（security package）：java.security下的类和扩展包下的类，允许用户为自己的应用增加新的安全特性，包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;安全提供者&lt;/li&gt;
+&lt;li&gt;消息摘要&lt;/li&gt;
+&lt;li&gt;数字签名&lt;/li&gt;
+&lt;li&gt;加密&lt;/li&gt;
+&lt;li&gt;鉴别&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Native（&lt;strong&gt;重点、唬住面试官&lt;/strong&gt;）&lt;/p&gt;
+&lt;p&gt;native：凡是带了native关键字，说明java的作用范围打不到了，回去调用底层的C语言的库&lt;/p&gt;
+&lt;p&gt;会进入本地方法栈，调用本地方法找本地接口 JNI&lt;/p&gt;
+&lt;p&gt;JNI的作用：扩展Java的使用，融合不同的编程语言为java使用，起初是为了调用C和C++，它在内存区域中专门开辟了一块标记区域：Native Method Stack 登记Natve方法，在最终执行的时候，加载本地方法库中的方法，通过JNI（例如Java程序驱动打印机），在企业级应用中较为少见&lt;/p&gt;
+&lt;p&gt;调用其他接口：Socket，WebService http&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PC寄存器&lt;/p&gt;
+&lt;p&gt;​		每个线程都有一个程序计数器，是线程私有的，就是一个指针，指向方法区中的方法字节码（用来存储指向一条指令的地址，也即将要执行的指令代码），在执行引擎读取下一条指令，是一个非常小的空间&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;方法区&lt;/p&gt;
+&lt;p&gt;Method Area 方法区&lt;/p&gt;
+&lt;p&gt;​		方法是被所有线程共享，所有字段和方法字节码，以及一些特殊方法，如构造函数，接口代码也在此定义，简单说，所有定义的方法信息都保存在这个区域，此区域属于共享区间：&lt;/p&gt;
+&lt;p&gt;​		&lt;strong&gt;静态变量，常量，类信息（构造方法，接口定义）运行时的常量池存在方法区中，但是实例变量存在堆内存中，和方法区无关&lt;/strong&gt;。（static，final，Class，常量池）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;栈&lt;/p&gt;
+&lt;p&gt;栈：数据结构&lt;/p&gt;
+&lt;p&gt;程序 = 数据结构 + 算法：持续学习&lt;/p&gt;
+&lt;p&gt;程序 = 框架 + 业务逻辑：吃饭&lt;/p&gt;
+&lt;p&gt;栈：栈内存，主管程序的运行，声明周期和线程同步，线程技术，栈内存就是释放，对于栈来说，不存在垃圾回收的问题，一旦线程技术，栈就over&lt;/p&gt;
+&lt;p&gt;8大基本类型 + 对象引用 + 实例的方法&lt;/p&gt;
+&lt;p&gt;栈运行原理：栈帧     StackOverflowError   栈溢出异常&lt;/p&gt;
+&lt;p&gt;栈 + 堆 + 方法区：交互关系&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E6%A0%88.png&#34; data-size=&#34;940x508&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E6%A0%88_huebe98bff8a6b9401ad3cccf584e44e28_140419_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E6%A0%88_huebe98bff8a6b9401ad3cccf584e44e28_140419_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E6%A0%88.png&#34; width=&#34;940&#34; height=&#34;508&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;程序正在执行的方法，一定在栈的顶部&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;三种JVM&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Sun公司：HotSpot&lt;/li&gt;
+&lt;li&gt;BEA JRockit&lt;/li&gt;
+&lt;li&gt;IBM J9 VM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;新生区、老年区&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;堆&lt;/p&gt;
+&lt;p&gt;Heap，一个JVM只有一个堆内存，堆内存的大小是可以调节的&lt;/p&gt;
+&lt;p&gt;类加载器读取了类文件后，一般会把什么东西放到堆中，类，方法，常量，变量~，保存我们所有引用类型的真实对象。&lt;/p&gt;
+&lt;p&gt;堆内存中还要细分为三个区域：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;新生区（伊甸园） Young new&lt;/li&gt;
+&lt;li&gt;老年区&lt;/li&gt;
+&lt;li&gt;永久区&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA.png&#34; data-size=&#34;943x689&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA_hu334f6538c0660e4c8711b0dc19a9d5dd_82940_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA_hu334f6538c0660e4c8711b0dc19a9d5dd_82940_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA.png&#34; width=&#34;943&#34; height=&#34;689&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;GC垃圾回收在伊甸园区和养老区，两个幸存区是过渡区&lt;/p&gt;
+&lt;p&gt;假设内存满了，&lt;strong&gt;OOM&lt;/strong&gt;，堆内存不够&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;OOM解决办法：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先检查代码问题&lt;/li&gt;
+&lt;li&gt;尝试扩大堆内存看结果&lt;/li&gt;
+&lt;li&gt;分析内存，看一下哪个地方出现了问题（专业工具）&lt;/li&gt;
+&lt;li&gt;使用JPofiler工具分析OOM原因&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在JDK8以后，永久存储区有另外一个名字，元空间&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;新生区、老年区、永久区（&lt;strong&gt;重点&lt;/strong&gt;）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;新生区&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;类：诞生和成长的地方，甚至死亡&lt;/li&gt;
+&lt;li&gt;伊甸园，所有的对象都在伊甸园区&lt;/li&gt;
+&lt;li&gt;幸存者区（0、1）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;老年区：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;真理：经过研究，99%的对象都是临时对象&lt;/p&gt;
+&lt;p&gt;**永久区（非堆）：**这个区域常驻内存的。用来存放JDK自身携带的Class对象，Interface元数据，存储的是Java运行时的一些环境或类信息，这个区域不存在垃圾回收。关闭VM虚拟就会释放这个区域的内存。&lt;/p&gt;
+&lt;p&gt;一个启动类加载了大量的第三方jar包，tomcat部署了太多的应用，大量动态生成的反射类，不断地被加载，知道内存满，就会出现OOM。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA2.png&#34; data-size=&#34;825x420&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA2_hue450bf7ca7f2aa6ec378a317bec3d169_114694_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA2_hue450bf7ca7f2aa6ec378a317bec3d169_114694_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA2.png&#34; width=&#34;825&#34; height=&#34;420&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;jdk1.6之前：永久代，常量池是在方法区&lt;/li&gt;
+&lt;li&gt;jdk1.7：永久代，但是慢慢地退化了，常量池在对中&lt;/li&gt;
+&lt;li&gt;jdk1.8之后：无永久代，常量池在元空间&lt;/li&gt;
+&lt;li&gt;元空间存在于本地内存，不存在于JVM内存中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA3.png&#34; data-size=&#34;1158x373&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA3_hu0001fbb71a424bd195ca0fc69c6c5278_79661_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA3_hu0001fbb71a424bd195ca0fc69c6c5278_79661_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E6%96%B0%E7%94%9F%E5%8C%BA%E5%85%BB%E8%80%81%E5%8C%BA%E6%B0%B8%E4%B9%85%E5%8C%BA3.png&#34; width=&#34;1158&#34; height=&#34;373&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;项目出错&lt;/strong&gt;：在一个项目中，突然出现了OOM故障，那么该如何排除，研究为什么出错&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;能够看到代码第几行出错，内存快照分析工具，MAT，Jprofiler&lt;/li&gt;
+&lt;li&gt;Debug，一行行分析代码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;MAT，Jprofiler作用：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;分析Dump内存文件，快速定位内存泄漏&lt;/li&gt;
+&lt;li&gt;获得&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;堆内存调优&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;GC：垃圾回收（重点）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;方法区和堆区是垃圾回收重要区域，99%是在堆区。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/GC%E4%BD%9C%E7%94%A8%E5%8C%BA%E5%9F%9F.png&#34; data-size=&#34;600x443&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/GC%E4%BD%9C%E7%94%A8%E5%8C%BA%E5%9F%9F_hu79a0db31b0769f1744d5129881c262d6_74081_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/GC%E4%BD%9C%E7%94%A8%E5%8C%BA%E5%9F%9F_hu79a0db31b0769f1744d5129881c262d6_74081_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/GC%E4%BD%9C%E7%94%A8%E5%8C%BA%E5%9F%9F.png&#34; width=&#34;600&#34; height=&#34;443&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;JVM在进行GC时，并不是对这三个区域统一回收，大部分时候，回收的都是新生代&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;新生代&lt;/li&gt;
+&lt;li&gt;幸存区(from  to)  &lt;strong&gt;谁空谁是to&lt;/strong&gt;！！！！&lt;/li&gt;
+&lt;li&gt;老年区&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;GC两种类：轻GC（普通的GC），重GC（全局GC）&lt;/p&gt;
+&lt;p&gt;题目：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;JVM的内存模型和分区-详细到每个区放什么&lt;/li&gt;
+&lt;li&gt;堆里面的分区有哪些？Eden，from，to，老年区，说说他们的特点&lt;/li&gt;
+&lt;li&gt;GC的算法有哪些？标记清楚发，标记整理，复制算法，引用计数器（几乎没有使用），怎么用的？&lt;/li&gt;
+&lt;li&gt;轻GC和重GC分别在什么时候发生？
+&lt;ol&gt;
+&lt;li&gt;每次轻GC都会将Eden活的对象移到幸存区中，一旦Eden区被GC后，就会是空的&lt;/li&gt;
+&lt;li&gt;当一个对象经历了15次GC，都还没有死，通过参数可以设定进入老年代的时间&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;引用计数法（不常使用）：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95.png&#34; data-size=&#34;702x309&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95_hu15720205cddcd3552a2c6ab1daf3c823_71706_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95_hu15720205cddcd3552a2c6ab1daf3c823_71706_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95.png&#34; width=&#34;702&#34; height=&#34;309&#34; loading=&#34;lazy&#34;
+				alt=&#34;啥&#34;&gt;
+		&lt;/a&gt;
+		
+		&lt;figcaption&gt;啥&lt;/figcaption&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;复制算法&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95.png&#34; data-size=&#34;1023x799&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95_hu55ce6cd876bd9359b51e2b8492adea1c_386444_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95_hu55ce6cd876bd9359b51e2b8492adea1c_386444_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95.png&#34; width=&#34;1023&#34; height=&#34;799&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%951.png&#34; data-size=&#34;1090x502&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%951_hu28042433867f5a955aec653c385b3831_164995_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%951_hu28042433867f5a955aec653c385b3831_164995_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%951.png&#34; width=&#34;1090&#34; height=&#34;502&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;好处：没有内存的碎片&lt;/li&gt;
+&lt;li&gt;坏处：浪费内存空间：多了一半空间永远是空to。假设对象100%存活&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;复制算法最佳使用场景：对象存活度较低的时候&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;标记清除算法&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;先标记清楚几次&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95.png&#34; data-size=&#34;713x481&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95_huce4d08f4e322a45a0f61035bab37053e_115804_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95_huce4d08f4e322a45a0f61035bab37053e_115804_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95.png&#34; width=&#34;713&#34; height=&#34;481&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;优点：不需要额外的空间！&lt;/li&gt;
+&lt;li&gt;缺点：两次扫描，严重浪费时间，产生内存碎片&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;标记压缩&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;再进行压缩&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/%E6%A0%87%E8%AE%B0%E5%8E%8B%E7%BC%A9.png&#34; data-size=&#34;663x719&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/%E6%A0%87%E8%AE%B0%E5%8E%8B%E7%BC%A9_hu9a94b6095a57a034b3f0bf8b8b8b4195_191290_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/%E6%A0%87%E8%AE%B0%E5%8E%8B%E7%BC%A9_hu9a94b6095a57a034b3f0bf8b8b8b4195_191290_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/%E6%A0%87%E8%AE%B0%E5%8E%8B%E7%BC%A9.png&#34; width=&#34;663&#34; height=&#34;719&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;有不连续的内存存储就存在内存碎片&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;​		引用计数法（不常使用）：&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
+&lt;p&gt;内存效率：复制算法 &amp;gt; 标记清除算法 &amp;gt; 标记压缩算法  （时间复杂度）&lt;/p&gt;
+&lt;p&gt;内存整齐度：复制算法= 标记压缩算法 &amp;gt; 标记清除算法&lt;/p&gt;
+&lt;p&gt;内存利用率：标记压缩算法 = 标记清除算法 &amp;gt; 复制算法&lt;/p&gt;
+&lt;p&gt;思考一个问题：难道没有最优算法&lt;/p&gt;
+&lt;p&gt;答案：没有，没有最好的算法，只有最合适的算法&amp;mdash;&amp;mdash;-&amp;gt; GC：分代收集算法&lt;/p&gt;
+&lt;p&gt;​&lt;/p&gt;
+&lt;p&gt;年轻代：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;存活率低&lt;/li&gt;
+&lt;li&gt;复制算法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;老年代：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;区域大：存活率&lt;/li&gt;
+&lt;li&gt;标记清楚 （内存碎片不是太多）+ 标记压缩混合实现&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基本了解jvm&lt;/p&gt;
+&lt;h1 id=&#34;jmmjava内存模型&#34;&gt;JMM：java内存模型&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;什么是 JMM？&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;它干嘛的？：官方、其他人的博客、对应的视频&lt;/p&gt;
+&lt;p&gt;作用：缓存一致性协议，用于定义数据读写的规则（遵守，找到这个规则）&lt;/p&gt;
+&lt;p&gt;JMM定义了线程和主内存之间的抽象关系：线程之间的共享变量存储在主内存（Main Memory）中，每个线程都有一个私有的本地内存（Local Memory）&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/jvm/JMM.png&#34; data-size=&#34;943x438&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/jvm/JMM_hu77dc8b79840a88824893611b5d08a77d_68866_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/jvm/JMM_hu77dc8b79840a88824893611b5d08a77d_68866_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/jvm/JMM.png&#34; width=&#34;943&#34; height=&#34;438&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;解决共享对象可见性这个问题：volatile&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;它该如何学习&lt;/p&gt;
+&lt;p&gt;JMM：抽象的概念，理论&lt;/p&gt;
+&lt;p&gt;volatile：保证可见性，不保证原子性，防止指令重排&lt;/p&gt;
+&lt;p&gt;synchronized&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;学习新东西是常态：&lt;/p&gt;
+&lt;p&gt;面试：&lt;/p&gt;
+&lt;p&gt;3/10 == pass 面经 = 10 分析这10个？触类旁通：百度面试题？&lt;/p&gt;
+&lt;p&gt;通过大量面试总结，得出一套解题思路&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>SNN脉冲神经网络</title>
+        <link>https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</link>
+        <pubDate>Mon, 30 Nov 2020 21:08:13 +0800</pubDate>
+        
+        <guid>https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</guid>
+        <description>&lt;img src="https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/ANN%E7%A5%9E%E7%BB%8F%E5%85%83%E5%92%8CSNN%E7%A5%9E%E7%BB%8F%E5%85%83%E5%AF%B9%E6%AF%94.png" alt="Featured image of post SNN脉冲神经网络" /&gt;&lt;h1 id=&#34;spiking-neural-network脉冲神经网络简述&#34;&gt;Spiking Neural Network（脉冲神经网络）简述&lt;/h1&gt;
+&lt;p&gt;传统神经网络包括现存的各种以perceptron为基本单元的拓扑变种， 比如卷积神经网络系列（CNNs), 循环神经网络系列（RNNs）, 生成对抗网络（GANs）， 自编码器（Autoencoders) 等等。 因为反向传播算法的存在和各类数学优化器的发展， 使得第二代神经网络在各项任务上有着出色的表现。&lt;/p&gt;
+&lt;p&gt;Spiking Neural Network(SNN) 被公认为继现有的MLP为基础的第二代神经网络(ANN)之后发展的第三代神经网络。虽然传统神经网络已然在各项任务上取得了优异的成绩， 但它们的原理和运算过程仍然和真正的人脑信息处理过程依然相差甚远。主要的差异可以总结为以下几点&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;传统神经网络算法仍然依据于使用&lt;strong&gt;高精度的浮点数&lt;/strong&gt;进行运算， 然而人脑并不会使用浮点数进行运算。 在人的传感系统和大脑中， &lt;strong&gt;信息会以动作电压或称之为电脉冲&lt;/strong&gt;（electric spike）的形式传递，接受，和处理。&lt;/li&gt;
+&lt;li&gt;ANN的训练过程对反向传播算法（梯度下降)的依赖程度非常之高， 然而在真实的人脑学习过程中，科学家们还没有观察到这种学习类型。 更多的， 人脑的记忆和学习依赖于突触后细胞受到刺激后所产生的突触可塑性。 详见： Hebbian learning&lt;/li&gt;
+&lt;li&gt;ANN通常需要大量的标签数据集来驱动网络的拟合。 这与我们平时经理的有所不同。 我们在很多情况下的感知和学习过程都是非监督式的。并且， 人脑通常不需要如此大量反复的数据来学习同一件事情。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;综上所述， 为了使神经网络更加接近于人脑， SNN随而诞生了。发现它的灵感，就来自于生物大脑处理信息的方式—spikes。 读到这里，就应该已经明白SNN并不是一个像CNN,RNN这样的网络结构， 而是一个新型的，更加接近人脑的一种神经网络算法的&lt;strong&gt;统称&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;snn和cnn的区别&#34;&gt;SNN和CNN的区别&lt;/h2&gt;
+&lt;h2 id=&#34;1信息载体&#34;&gt;1、信息载体&lt;/h2&gt;
+&lt;p&gt;​		首先， 最基本的区别是SNN和ANN的信息载体不一样。 ANN 使用的是高精度浮点数而SNN使用的是spikes 或可以理解为1和0，这就大大增加了信息在网络中的稀疏性。这些spike在网络中有相同的幅度和区间.&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/snn%E5%92%8Cann%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E8%BD%BD%E4%BD%93.png&#34; data-size=&#34;691x249&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/snn%E5%92%8Cann%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E8%BD%BD%E4%BD%93_hucf85fe435298eca15779b93b299d1148_44984_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/snn%E5%92%8Cann%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E8%BD%BD%E4%BD%93_hucf85fe435298eca15779b93b299d1148_44984_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/snn%E5%92%8Cann%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E8%BD%BD%E4%BD%93.png&#34; width=&#34;691&#34; height=&#34;249&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;那么，在SNN中， 信息是如何用spike来表达的呢？ 这就涉及到脉冲编码的知识了。这里做简单介绍，之后我会再详细解释它。 在SNN中， 很重要的一点是引入了时序（temporal）相关的处理形式。 信息是被编码在脉冲序列的时间序列（spike train）中的。 例如： 高频率的一组脉冲序列可以代表一个较高的值而低频率的脉冲则代表低值。又例如： 在一个固定的时间窗中， 单个脉冲出现的位置也可以代表相应的值/信息。&lt;/p&gt;
+&lt;h2 id=&#34;2神经元&#34;&gt;2、神经元&lt;/h2&gt;
+&lt;p&gt;既然信息的载体不一样， 那么神经网络中的基本单元–神经元肯定也是不一样的。 对ANN有了解的同学们都知道， 基本神经元perceptron 是一个简单的 加乘运算器用来整合输入该神经元的值 而后接着一个非线性的激活方程（Non-linear activation function）。然而这种针对确切数值的运算并不适用于二进制脉冲的处理。 在SNN中， 基本的运算单元为&lt;strong&gt;以生物突触结构为基础构建的脉冲神经元&lt;/strong&gt;（spiking neuron)。 想象有两个spiking neuron 其中一个为突触前神经元（pre-synaptic neuron）作为spiking的&lt;strong&gt;发出者&lt;/strong&gt;， 一个为突触后神经元（post-synaptic neuron) 作为spike的&lt;strong&gt;接受者&lt;/strong&gt;。 spiking neuron所进行的处理是接受&lt;strong&gt;由突触传递而来的脉冲&lt;/strong&gt;， 依据突触权重&lt;strong&gt;通过spiking function产生突触后膜电压&lt;/strong&gt;（post synaptic potential (PSP)）&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/snn%E5%92%8Cann%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E8%BD%BD%E4%BD%93.png&#34; data-size=&#34;691x249&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/snn%E5%92%8Cann%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E8%BD%BD%E4%BD%93_hucf85fe435298eca15779b93b299d1148_44984_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/snn%E5%92%8Cann%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E8%BD%BD%E4%BD%93_hucf85fe435298eca15779b93b299d1148_44984_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/snn%E5%92%8Cann%E4%BF%A1%E6%81%AF%E7%BD%91%E7%BB%9C%E8%BD%BD%E4%BD%93.png&#34; width=&#34;691&#34; height=&#34;249&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;​		既然信息的载体不一样， 那么神经网络中的基本单元–神经元肯定也是不一样的。 对ANN有了解的都知道， 基本神经元perceptron 是一个简单的 加乘运算器用来整合输入该神经元的值 而后接着一个非线性的激活方程（Non-linear activation function）。然而这种针对确切数值的运算并不适用于二进制脉冲的处理。 在SNN中， 基本的运算单元为以生物突触结构为基础构建的脉冲神经元（spiking neuron)。 想象有两个spiking neuron 其中一个为突触前神经元（pre-synaptic neuron）作为spiking的发出者， 一个为突触后神经元（post-synaptic neuron) 作为spike的接受者。 spiking neuron所进行的处理是接受由突触传递而来的脉冲， 依据突触权重通过spiking function产生突触后膜电压（post synaptic potential (PSP)）&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/SNN%E7%A5%9E%E7%BB%8F%E5%85%83.png&#34; data-size=&#34;716x494&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/SNN%E7%A5%9E%E7%BB%8F%E5%85%83_hu39594c81db13f9c51eefe091dfb41a6a_160490_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/SNN%E7%A5%9E%E7%BB%8F%E5%85%83_hu39594c81db13f9c51eefe091dfb41a6a_160490_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/SNN%E7%A5%9E%E7%BB%8F%E5%85%83.png&#34; width=&#34;716&#34; height=&#34;494&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;​		那么PSP是啥呢，如下图膜电压在接受到脉冲输入前会一直保持在 − 70 -70−70mV 的地方， 这个值通常叫做静止值（resting value）。 当接受到刺激后， 会产生电压变化的幅值。 在变化结束后， 膜电压会归位回起始的静止值。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%8D%95%E4%B8%AAspike%E4%BA%A7%E7%94%9F%E7%9A%84%E8%86%9C%E7%94%B5%E5%8E%8B%E5%8F%98%E5%8C%96.png&#34; data-size=&#34;506x292&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%8D%95%E4%B8%AAspike%E4%BA%A7%E7%94%9F%E7%9A%84%E8%86%9C%E7%94%B5%E5%8E%8B%E5%8F%98%E5%8C%96_hufe098e620dbb3b72c1e29fdcdb7fc954_25807_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%8D%95%E4%B8%AAspike%E4%BA%A7%E7%94%9F%E7%9A%84%E8%86%9C%E7%94%B5%E5%8E%8B%E5%8F%98%E5%8C%96_hufe098e620dbb3b72c1e29fdcdb7fc954_25807_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%8D%95%E4%B8%AAspike%E4%BA%A7%E7%94%9F%E7%9A%84%E8%86%9C%E7%94%B5%E5%8E%8B%E5%8F%98%E5%8C%96.png&#34; width=&#34;506&#34; height=&#34;292&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;​		当一个突触后神经元接受到多个channel的脉冲序列输入膜电压会发生变化。&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%A4%9A%E4%B8%AAspike%E8%84%89%E5%86%B2%E4%BC%A0%E8%BE%93.png&#34; data-size=&#34;723x356&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%A4%9A%E4%B8%AAspike%E8%84%89%E5%86%B2%E4%BC%A0%E8%BE%93_hu95248ed1653ef5db0972fccae8753ca6_35027_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%A4%9A%E4%B8%AAspike%E8%84%89%E5%86%B2%E4%BC%A0%E8%BE%93_hu95248ed1653ef5db0972fccae8753ca6_35027_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/%E5%A4%9A%E4%B8%AAspike%E8%84%89%E5%86%B2%E4%BC%A0%E8%BE%93.png&#34; width=&#34;723&#34; height=&#34;356&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;3学习方法使用方法&#34;&gt;3、学习方法/使用方法&lt;/h2&gt;
+&lt;p&gt;传统ANN主要依赖于基于梯度下降的反向传播算法。 但在SNN中， 因为spiking neuron的function通常为不可导的差分方程， 在SNN中实现反向传播就显得异常的困难。 那么如何训练SNN呢？&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;将传统ANN转换为SNN&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;既然SNN不可以使用BP来训练那么将传统的神经网络训练好转换为SNN是有可能的吗？ 答案是肯定的。 这种方法的优点是不用考虑任何SNN的特性， 但要将训练好的网络在输入，运算和输出上全面转换为以二进制spike为处理载体的网络。 在输入上，要将输入信号编码为脉冲序列。 所有神经元要用相应的spiking neuron来替换， 训练所得得权重要进行量化。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;反向传播&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;脉冲神经元得spike function的确无法直接求导做差计算出梯度。 但研究人员想出了很多聪明得方法来预估网络中得变化参数得梯度从而进行反向传播。 这样得算法虽然还存在争论但它确实在某种程度上降低了SNN得训练复杂度， 这样得算法比如有 spikeprop, Slayer 等等&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;突触可塑性&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;这个相比前两种方法就更加接近于生物学得学习了。 利用生物学得原理研究人员将spike time dependent plasticity （脉冲时间相关可塑性）引入了SNN得训练。 然而这种训练方法虽然novel， 但训练过程非常繁琐， 而且是一种纯非监督式学习， 非常考验设计者对神经科学和神经网络得理解， 我会后续继续写出相关得博客来介绍并使用它。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/Yannan_Strath/article/details/105761023&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;转载自博客&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Java_多线程</title>
+        <link>https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+        <pubDate>Mon, 30 Nov 2020 20:39:38 +0800</pubDate>
+        
+        <guid>https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
+        <description>&lt;img src="https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post Java_多线程" /&gt;&lt;h1 id=&#34;java多线程详解&#34;&gt;java多线程详解&lt;/h1&gt;
+&lt;h2 id=&#34;三种创建方式&#34;&gt;三种创建方式&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Thread class：继承Thread类(重点)，重写run()方法，创建一个线程对象，调用start()开启线程，线程不一定立即执行，cpu调度多线程&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Runnable接口：实现Runnable接口(重点)，重写run方法，创建runnable接口的实现类对象，创建线程对象，通过线程对象来开启我们的线程，代理，调用start方法&lt;/p&gt;
+&lt;p&gt;new Thread(testThread3).start&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BB%A7%E6%89%BFThread%E7%B1%BB%E5%92%8C%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94.png&#34; data-size=&#34;1088x557&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BB%A7%E6%89%BFThread%E7%B1%BB%E5%92%8C%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94_huda276faa561578bf5de9c993edb7b589_394799_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BB%A7%E6%89%BFThread%E7%B1%BB%E5%92%8C%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94_huda276faa561578bf5de9c993edb7b589_394799_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BB%A7%E6%89%BFThread%E7%B1%BB%E5%92%8C%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94.png&#34; width=&#34;1088&#34; height=&#34;557&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Callable接口：实现Callable接口(了解)&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%AE%9E%E7%8E%B0Callable%E6%8E%A5%E5%8F%A3.png&#34; data-size=&#34;1445x612&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%AE%9E%E7%8E%B0Callable%E6%8E%A5%E5%8F%A3_hu8612f783c54d6a51eb0fe32175825622_223332_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%AE%9E%E7%8E%B0Callable%E6%8E%A5%E5%8F%A3_hu8612f783c54d6a51eb0fe32175825622_223332_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%AE%9E%E7%8E%B0Callable%E6%8E%A5%E5%8F%A3.png&#34; width=&#34;1445&#34; height=&#34;612&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;好处：可以定义返回值，可以跑出异常&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;多个线程操作同一个资源的情况下，线程不安全，数据紊乱&lt;/p&gt;
+&lt;h2 id=&#34;静态代理&#34;&gt;静态代理&lt;/h2&gt;
+&lt;p&gt;婚庆公司！&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;静态代理模式总结&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;真实对象和代理对象都要实现统一个接口，代理对象要代理真实角色&lt;/p&gt;
+&lt;p&gt;代理对象可以做很多真实对象做不了的事情&lt;/p&gt;
+&lt;p&gt;真实对象专注做自己的事情&lt;/p&gt;
+&lt;h2 id=&#34;lamda表达式&#34;&gt;Lamda表达式&lt;/h2&gt;
+&lt;p&gt;函数式 接口：&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3.png&#34; data-size=&#34;1227x549&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3_hu80a171a8de4247d3968dd9af462cd7ab_239801_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3_hu80a171a8de4247d3968dd9af462cd7ab_239801_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3.png&#34; width=&#34;1227&#34; height=&#34;549&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;Lamda表达式&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F.png&#34; data-size=&#34;1417x693&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F_hu0dcb76ebb9560c08ec71d477951b4dc6_358423_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F_hu0dcb76ebb9560c08ec71d477951b4dc6_358423_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F.png&#34; width=&#34;1417&#34; height=&#34;693&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;线程状态&#34;&gt;线程状态&lt;/h2&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81.png&#34; data-size=&#34;1009x531&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81_hub78e3ae88ae220c853ee14c3ac9e096a_177898_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81_hub78e3ae88ae220c853ee14c3ac9e096a_177898_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81.png&#34; width=&#34;1009&#34; height=&#34;531&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;线程停止&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;建议线程正常停止&amp;mdash;&amp;gt;利用次数，不建议死循环&lt;/p&gt;
+&lt;p&gt;建议使用标志位&amp;mdash;&amp;gt;设置一个标志位&lt;/p&gt;
+&lt;p&gt;不要使用stop或者destory等过时或者jdk不建议使用的方法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;线程休眠&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;sleep指定当前线程阻塞的毫秒数&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E4%BC%91%E7%9C%A0sleep.png&#34; data-size=&#34;932x454&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E4%BC%91%E7%9C%A0sleep_hud1ae59f40c4ac4e9ac612f5f94b655aa_208644_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E4%BC%91%E7%9C%A0sleep_hud1ae59f40c4ac4e9ac612f5f94b655aa_208644_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E4%BC%91%E7%9C%A0sleep.png&#34; width=&#34;932&#34; height=&#34;454&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;线程礼让——yield&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E7%A4%BC%E8%AE%A9.png&#34; data-size=&#34;839x416&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E7%A4%BC%E8%AE%A9_hu3b4b8012da7c316b4ed48e90a89228f5_118795_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E7%A4%BC%E8%AE%A9_hu3b4b8012da7c316b4ed48e90a89228f5_118795_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E7%A4%BC%E8%AE%A9.png&#34; width=&#34;839&#34; height=&#34;416&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;线程强制执行——join&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;想象为插队&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E5%BC%BA%E5%88%B6%E6%89%A7%E8%A1%8C.png&#34; data-size=&#34;1527x766&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E5%BC%BA%E5%88%B6%E6%89%A7%E8%A1%8C_hu40232840b654adb0d0ef344e4be4e032_441875_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E5%BC%BA%E5%88%B6%E6%89%A7%E8%A1%8C_hu40232840b654adb0d0ef344e4be4e032_441875_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/%E7%BA%BF%E7%A8%8B%E5%BC%BA%E5%88%B6%E6%89%A7%E8%A1%8C.png&#34; width=&#34;1527&#34; height=&#34;766&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>SGnet论文阅读</title>
+        <link>https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
         <pubDate>Sun, 29 Nov 2020 15:38:53 +0800</pubDate>
         
-        <guid>https://a447593787.github.io/p/sgnet/</guid>
-        <description>&lt;img src="https://a447593787.github.io/p/sgnet/fig1.png" alt="Featured image of post SGnet" /&gt;&lt;h1 id=&#34;论文阅读笔记&#34;&gt;论文阅读笔记&lt;/h1&gt;
+        <guid>https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</guid>
+        <description>&lt;img src="https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1.png" alt="Featured image of post SGnet论文阅读" /&gt;&lt;h1 id=&#34;论文阅读笔记&#34;&gt;论文阅读笔记&lt;/h1&gt;
 &lt;h1 id=&#34;tactilesgnet-a-spiking-graph-neural-network-for-event-based-tactile-object-recognition&#34;&gt;TactileSGNet: A Spiking Graph Neural Network for Event-based Tactile Object Recognition&lt;/h1&gt;
 &lt;p&gt;event-driven或event-based&lt;/p&gt;
 &lt;p&gt;SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输入，创建稀疏，无帧和精确定时的事件流，模型LIF和IF，我们把每个脉冲的产生看成一个事件，所以说SNN是以事件驱动的，事件驱动的神经元系统将其计算工作集中在网络的当前活动部分，由于输入是一连串的脉冲，所以可以看成整个网络的神经元都在进行工作，但他们只关注其自己当前所接受的东西，所以相对于ANN他是低延迟&lt;/p&gt;
@@ -42,9 +658,9 @@
 &lt;h2 id=&#34;背景和相关工作&#34;&gt;背景和相关工作&lt;/h2&gt;
 &lt;p&gt;​		我们的工作结合了图形神经网络和脉冲神经网络在基于事件的触觉对象识别方面的最新进展。在下文中，我们简要概述了这些领域的背景和相关工作。请注意，这些研究领域是广泛的，由于空间的限制，我们涵盖了代表性的工作，并向想要更多细节的读者推荐更全面的调查文章。&lt;/p&gt;
 &lt;p&gt;&lt;figure&gt;
-		&lt;a href=&#34;https://a447593787.github.io/p/sgnet/fig1.png&#34; data-size=&#34;453x325&#34;&gt;
-			&lt;img srcset=&#34;https://a447593787.github.io/p/sgnet/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/sgnet/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_1024x0_resize_box_2.png 1024w&#34;
-				src=&#34;https://a447593787.github.io/p/sgnet/fig1.png&#34; width=&#34;453&#34; height=&#34;325&#34; loading=&#34;lazy&#34;
+		&lt;a href=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1.png&#34; data-size=&#34;453x325&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1.png&#34; width=&#34;453&#34; height=&#34;325&#34; loading=&#34;lazy&#34;
 				alt=&#34;&amp;nbsp;&#34;&gt;
 		&lt;/a&gt;
 		
@@ -60,9 +676,9 @@
 &lt;p&gt;​		为了处理来自触觉传感器的数据，可以采用深度神经网络中使用的标准卷积层[31]。然而，这需要将数据“强制”到网格结构中，这需要用零填充(或插值)单元值指定任意的网格大小。在这里，我们采取了一种更自然的方法，基于底层分类的局部空间排列构建触觉图。&lt;/p&gt;
 &lt;p&gt;​		设G = (V，E)为触觉图，其中V为一组N个节点，E为一组无向边4。节点自然地被映射到taxels，但是边缘必须被指定。我们建议利用点的空间/几何配置，并引入基于欧几里德的边计算两点之间的距离&lt;/p&gt;
 &lt;p&gt;&lt;figure&gt;
-		&lt;a href=&#34;https://a447593787.github.io/p/sgnet/fig2.png&#34; data-size=&#34;557x294&#34;&gt;
-			&lt;img srcset=&#34;https://a447593787.github.io/p/sgnet/fig2_hu993ebe522d2bef64ea7b2af418616fb9_51143_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/sgnet/fig2_hu993ebe522d2bef64ea7b2af418616fb9_51143_1024x0_resize_box_2.png 1024w&#34;
-				src=&#34;https://a447593787.github.io/p/sgnet/fig2.png&#34; width=&#34;557&#34; height=&#34;294&#34; loading=&#34;lazy&#34;
+		&lt;a href=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig2.png&#34; data-size=&#34;557x294&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig2_hu993ebe522d2bef64ea7b2af418616fb9_51143_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig2_hu993ebe522d2bef64ea7b2af418616fb9_51143_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig2.png&#34; width=&#34;557&#34; height=&#34;294&#34; loading=&#34;lazy&#34;
 				alt=&#34;&amp;nbsp;&#34;&gt;
 		&lt;/a&gt;
 		
@@ -74,9 +690,9 @@
 &lt;p&gt;处理：SNN封装的GNN+MLP&lt;/p&gt;
 &lt;p&gt;输出：label&lt;/p&gt;
 &lt;p&gt;&lt;figure&gt;
-		&lt;a href=&#34;https://a447593787.github.io/p/sgnet/fig3.png&#34; data-size=&#34;1066x277&#34;&gt;
-			&lt;img srcset=&#34;https://a447593787.github.io/p/sgnet/fig3_hu7cfdaeda18537b8cef0e38da3efdc253_153472_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/sgnet/fig3_hu7cfdaeda18537b8cef0e38da3efdc253_153472_1024x0_resize_box_2.png 1024w&#34;
-				src=&#34;https://a447593787.github.io/p/sgnet/fig3.png&#34; width=&#34;1066&#34; height=&#34;277&#34; loading=&#34;lazy&#34;
+		&lt;a href=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig3.png&#34; data-size=&#34;1066x277&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig3_hu7cfdaeda18537b8cef0e38da3efdc253_153472_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig3_hu7cfdaeda18537b8cef0e38da3efdc253_153472_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig3.png&#34; width=&#34;1066&#34; height=&#34;277&#34; loading=&#34;lazy&#34;
 				alt=&#34;&amp;nbsp;&#34;&gt;
 		&lt;/a&gt;
 		
@@ -95,9 +711,9 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;figure&gt;
-		&lt;a href=&#34;https://a447593787.github.io/p/sgnet/fig5.png&#34; data-size=&#34;546x200&#34;&gt;
-			&lt;img srcset=&#34;https://a447593787.github.io/p/sgnet/fig5_hu7e35d1e5b9992d98878f6df50595d2c0_122459_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/sgnet/fig5_hu7e35d1e5b9992d98878f6df50595d2c0_122459_1024x0_resize_box_2.png 1024w&#34;
-				src=&#34;https://a447593787.github.io/p/sgnet/fig5.png&#34; width=&#34;546&#34; height=&#34;200&#34; loading=&#34;lazy&#34;
+		&lt;a href=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig5.png&#34; data-size=&#34;546x200&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig5_hu7e35d1e5b9992d98878f6df50595d2c0_122459_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig5_hu7e35d1e5b9992d98878f6df50595d2c0_122459_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig5.png&#34; width=&#34;546&#34; height=&#34;200&#34; loading=&#34;lazy&#34;
 				alt=&#34;&amp;nbsp;&#34;&gt;
 		&lt;/a&gt;
 		
@@ -105,12 +721,12 @@
 </description>
         </item>
         <item>
-        <title>测试文章</title>
-        <link>https://a447593787.github.io/p/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</link>
-        <pubDate>Mon, 19 Oct 2020 17:50:20 +0800</pubDate>
+        <title>java_duoxiancheng</title>
+        <link>https://a447593787.github.io/p/java_duoxiancheng/</link>
+        <pubDate>Mon, 16 Nov 2020 15:38:53 +0800</pubDate>
         
-        <guid>https://a447593787.github.io/p/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</guid>
-        <description>&lt;h1 id=&#34;java多线程详解&#34;&gt;java多线程详解&lt;/h1&gt;
+        <guid>https://a447593787.github.io/p/java_duoxiancheng/</guid>
+        <description>&lt;img src="https://a447593787.github.io/p/java_duoxiancheng/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post java_duoxiancheng" /&gt;&lt;h1 id=&#34;java多线程详解&#34;&gt;java多线程详解&lt;/h1&gt;
 &lt;h2 id=&#34;三种创建方式&#34;&gt;三种创建方式&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;
@@ -119,11 +735,25 @@
 &lt;li&gt;
 &lt;p&gt;Runnable接口：实现Runnable接口(重点)，重写run方法，创建runnable接口的实现类对象，创建线程对象，通过线程对象来开启我们的线程，代理，调用start方法&lt;/p&gt;
 &lt;p&gt;new Thread(testThread3).start&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%bb%a7%e6%89%bfThread%e7%b1%bb%e5%92%8c%e5%ae%9e%e7%8e%b0Runnable%e6%8e%a5%e5%8f%a3%e5%af%b9%e6%af%94.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BB%A7%E6%89%BFThread%E7%B1%BB%E5%92%8C%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94.png&#34; data-size=&#34;1088x557&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BB%A7%E6%89%BFThread%E7%B1%BB%E5%92%8C%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94_huda276faa561578bf5de9c993edb7b589_394799_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_duoxiancheng/%E7%BB%A7%E6%89%BFThread%E7%B1%BB%E5%92%8C%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94_huda276faa561578bf5de9c993edb7b589_394799_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BB%A7%E6%89%BFThread%E7%B1%BB%E5%92%8C%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E5%AF%B9%E6%AF%94.png&#34; width=&#34;1088&#34; height=&#34;557&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Callable接口：实现Callable接口(了解)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e5%ae%9e%e7%8e%b0Callable%e6%8e%a5%e5%8f%a3.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E5%AE%9E%E7%8E%B0Callable%E6%8E%A5%E5%8F%A3.png&#34; data-size=&#34;1445x612&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E5%AE%9E%E7%8E%B0Callable%E6%8E%A5%E5%8F%A3_hu8612f783c54d6a51eb0fe32175825622_223332_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_duoxiancheng/%E5%AE%9E%E7%8E%B0Callable%E6%8E%A5%E5%8F%A3_hu8612f783c54d6a51eb0fe32175825622_223332_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E5%AE%9E%E7%8E%B0Callable%E6%8E%A5%E5%8F%A3.png&#34; width=&#34;1445&#34; height=&#34;612&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;好处：可以定义返回值，可以跑出异常&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
@@ -136,11 +766,32 @@
 &lt;p&gt;真实对象专注做自己的事情&lt;/p&gt;
 &lt;h2 id=&#34;lamda表达式&#34;&gt;Lamda表达式&lt;/h2&gt;
 &lt;p&gt;函数式 接口：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e5%87%bd%e6%95%b0%e5%bc%8f%e6%8e%a5%e5%8f%a3.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3.png&#34; data-size=&#34;1227x549&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3_hu80a171a8de4247d3968dd9af462cd7ab_239801_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_duoxiancheng/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3_hu80a171a8de4247d3968dd9af462cd7ab_239801_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3.png&#34; width=&#34;1227&#34; height=&#34;549&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Lamda表达式&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5clamda%e8%a1%a8%e8%be%be%e5%bc%8f.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_duoxiancheng/lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F.png&#34; data-size=&#34;1417x693&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_duoxiancheng/lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F_hu0dcb76ebb9560c08ec71d477951b4dc6_358423_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_duoxiancheng/lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F_hu0dcb76ebb9560c08ec71d477951b4dc6_358423_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_duoxiancheng/lamda%E8%A1%A8%E8%BE%BE%E5%BC%8F.png&#34; width=&#34;1417&#34; height=&#34;693&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
 &lt;h2 id=&#34;线程状态&#34;&gt;线程状态&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e7%8a%b6%e6%80%81.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81.png&#34; data-size=&#34;1009x531&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81_hub78e3ae88ae220c853ee14c3ac9e096a_177898_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81_hub78e3ae88ae220c853ee14c3ac9e096a_177898_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81.png&#34; width=&#34;1009&#34; height=&#34;531&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;线程停止&lt;/strong&gt;&lt;/p&gt;
@@ -151,18 +802,87 @@
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;线程休眠&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;sleep指定当前线程阻塞的毫秒数&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e4%bc%91%e7%9c%a0sleep.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E4%BC%91%E7%9C%A0sleep.png&#34; data-size=&#34;932x454&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E4%BC%91%E7%9C%A0sleep_hud1ae59f40c4ac4e9ac612f5f94b655aa_208644_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E4%BC%91%E7%9C%A0sleep_hud1ae59f40c4ac4e9ac612f5f94b655aa_208644_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E4%BC%91%E7%9C%A0sleep.png&#34; width=&#34;932&#34; height=&#34;454&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;线程礼让——yield&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e7%a4%bc%e8%ae%a9.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E7%A4%BC%E8%AE%A9.png&#34; data-size=&#34;839x416&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E7%A4%BC%E8%AE%A9_hu3b4b8012da7c316b4ed48e90a89228f5_118795_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E7%A4%BC%E8%AE%A9_hu3b4b8012da7c316b4ed48e90a89228f5_118795_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E7%A4%BC%E8%AE%A9.png&#34; width=&#34;839&#34; height=&#34;416&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;线程强制执行——join&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;想象为插队&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e5%bc%ba%e5%88%b6%e6%89%a7%e8%a1%8c.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E5%BC%BA%E5%88%B6%E6%89%A7%E8%A1%8C.png&#34; data-size=&#34;1527x766&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E5%BC%BA%E5%88%B6%E6%89%A7%E8%A1%8C_hu40232840b654adb0d0ef344e4be4e032_441875_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E5%BC%BA%E5%88%B6%E6%89%A7%E8%A1%8C_hu40232840b654adb0d0ef344e4be4e032_441875_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/java_duoxiancheng/%E7%BA%BF%E7%A8%8B%E5%BC%BA%E5%88%B6%E6%89%A7%E8%A1%8C.png&#34; width=&#34;1527&#34; height=&#34;766&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>JUC并发编程</title>
+        <link>https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</link>
+        <pubDate>Mon, 16 Nov 2020 15:38:53 +0800</pubDate>
+        
+        <guid>https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</guid>
+        <description>&lt;img src="https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/juc.png" alt="Featured image of post JUC并发编程" /&gt;&lt;h1 id=&#34;juc并发编程&#34;&gt;JUC并发编程&lt;/h1&gt;
+&lt;h2 id=&#34;1什么是juc&#34;&gt;1、什么是JUC&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;源码+官方文档&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/juc.png&#34; data-size=&#34;679x304&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/juc_hu6da8bf02858a2cad60d2fecdf269329f_101336_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/juc_hu6da8bf02858a2cad60d2fecdf269329f_101336_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/juc.png&#34; width=&#34;679&#34; height=&#34;304&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;java.util 工具包、包、分类&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;业务：普通的线程代码 Thread&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Runnable	没有返回值、效率相比Callable相对较低&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+		&lt;a href=&#34;https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Callable.png&#34; data-size=&#34;990x380&#34;&gt;
+			&lt;img srcset=&#34;https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Callable_hu03697a59c7b3876f1c08d4ca5f6d72ce_184968_480x0_resize_box_2.png 480w, https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Callable_hu03697a59c7b3876f1c08d4ca5f6d72ce_184968_1024x0_resize_box_2.png 1024w&#34;
+				src=&#34;https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Callable.png&#34; width=&#34;990&#34; height=&#34;380&#34; loading=&#34;lazy&#34;
+				alt=&#34;&amp;nbsp;&#34;&gt;
+		&lt;/a&gt;
+		
+	&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;2线程和进程&#34;&gt;2、线程和进程&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;线程、进程，如果不能使用一句话说出来的技术，不扎实。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;进程：一个程序，QQ.exe  Music.exe  程序的集合；&lt;/p&gt;
+&lt;p&gt;一个进程往往可以包含多个线程，至少包含一个！&lt;/p&gt;
+&lt;p&gt;java默认有几个线程？2个  main、GC(垃圾回收)&lt;/p&gt;
+&lt;p&gt;线程：开了一个京城Typora，写字，自动保存（线程负责的）&lt;/p&gt;
+&lt;p&gt;Thread、Runnable、Callable&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Java真的可以开启线程吗&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;开不了&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Java无法直接操作硬件，运行在jvm虚拟机上&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;并发、并行&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;并发编程：并发、并行&lt;/p&gt;
+&lt;p&gt;并发（多线程操作同一个资源）&lt;/p&gt;
+&lt;p&gt;并行（多个人一起行走）&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -222,67 +942,6 @@
 &lt;p&gt;&lt;strong&gt;线程强制执行——join&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;想象为插队&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%ba%bf%e7%a8%8b%e5%bc%ba%e5%88%b6%e6%89%a7%e8%a1%8c.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-</description>
-        </item>
-        <item>
-        <title>java多线程入门</title>
-        <link>https://a447593787.github.io/p/test-chinese/</link>
-        <pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
-        
-        <guid>https://a447593787.github.io/p/test-chinese/</guid>
-        <description>&lt;img src="https://a447593787.github.io/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post java多线程入门" /&gt;&lt;h1 id=&#34;java多线程详解&#34;&gt;java多线程详解&lt;/h1&gt;
-&lt;h2 id=&#34;三种创建方式&#34;&gt;三种创建方式&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;Thread class：继承Thread类(重点)，重写run()方法，创建一个线程对象，调用start()开启线程，线程不一定立即执行，cpu调度多线程&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Runnable接口：实现Runnable接口(重点)，重写run方法，创建runnable接口的实现类对象，创建线程对象，通过线程对象来开启我们的线程，代理，调用start方法&lt;/p&gt;
-&lt;p&gt;new Thread(testThread3).start&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e7%bb%a7%e6%89%bfThread%e7%b1%bb%e5%92%8c%e5%ae%9e%e7%8e%b0Runnable%e6%8e%a5%e5%8f%a3%e5%af%b9%e6%af%94.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Callable接口：实现Callable接口(了解)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;D:%5chugo_0.76.4_Windows-64bit%5cmyblog2%5ccontent%5cjava_duoxiancheng%5c%e5%ae%9e%e7%8e%b0Callable%e6%8e%a5%e5%8f%a3.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;好处：可以定义返回值，可以跑出异常&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;多个线程操作同一个资源的情况下，线程不安全，数据紊乱&lt;/p&gt;
-&lt;h2 id=&#34;静态代理&#34;&gt;静态代理&lt;/h2&gt;
-&lt;p&gt;婚庆公司！&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;静态代理模式总结&lt;/strong&gt;：&lt;/p&gt;
-&lt;p&gt;真实对象和代理对象都要实现统一个接口，代理对象要代理真实角色&lt;/p&gt;
-&lt;p&gt;代理对象可以做很多真实对象做不了的事情&lt;/p&gt;
-&lt;p&gt;真实对象专注做自己的事情&lt;/p&gt;
-&lt;h2 id=&#34;lamda表达式&#34;&gt;Lamda表达式&lt;/h2&gt;
-&lt;p&gt;函数式 接口：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;%e5%87%bd%e6%95%b0%e5%bc%8f%e6%8e%a5%e5%8f%a3.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
-&lt;p&gt;Lamda表达式&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;lamda%e8%a1%a8%e8%be%be%e5%bc%8f.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;线程状态&#34;&gt;线程状态&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;%e7%ba%bf%e7%a8%8b%e7%8a%b6%e6%80%81.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;线程停止&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;建议线程正常停止&amp;mdash;&amp;gt;利用次数，不建议死循环&lt;/p&gt;
-&lt;p&gt;建议使用标志位&amp;mdash;&amp;gt;设置一个标志位&lt;/p&gt;
-&lt;p&gt;不要使用stop或者destory等过时或者jdk不建议使用的方法。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;线程休眠&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;sleep指定当前线程阻塞的毫秒数&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;%e7%ba%bf%e7%a8%8b%e4%bc%91%e7%9c%a0sleep.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;线程礼让——yield&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;%e7%ba%bf%e7%a8%8b%e7%a4%bc%e8%ae%a9.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;线程强制执行——join&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;想象为插队&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;%e7%ba%bf%e7%a8%8b%e5%bc%ba%e5%88%b6%e6%89%a7%e8%a1%8c.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 </description>

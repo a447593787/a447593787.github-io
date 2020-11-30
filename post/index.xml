@@ -6,13 +6,94 @@
     <description>Recent content in Posts on Weiliang Lin</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 29 Nov 2020 15:38:53 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 30 Nov 2020 21:13:29 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>SGnet</title>
-      <link>https://a447593787.github.io/p/sgnet/</link>
+      <title>JVM</title>
+      <link>https://a447593787.github.io/p/jvm/</link>
+      <pubDate>Mon, 30 Nov 2020 21:13:29 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/p/jvm/</guid>
+      <description>JVM虚拟机 JAVA内存分析   
+第一步，JVM去方法区寻找Test类的代码信息，如果有直接调用，没有的话使用类的加载机制把类加载进来。同时把静态变量、静态方法、常量加载进来。这里加载的是（“冯冬冬的IT技术栈”，“冯XX”）；这是因为字符串是常量，age中的18是基本类型。 第二步，jvm进入main方法，看到Person person=new Person()。首先分析Person这个类，同样的寻找Person类的代码信息，有就加载，没有的话类加载机制加载进来。同时也加载静态变量、静态方法、常量（“我正在走路。。。”） 第三步，jvm接下来看到了person，person在main方法内部，因而是局部变量，存放在栈空间中。 第四步，jvm接下来看到了new Person()。new出的对象（实例），存放在堆空间中。
+第五步，jvm接下来看到了“=”，把new Person的地址告诉person变量，person通过四字节的地址（十六进制），引用该实例。 是不是有点晕，别着急，画个图看一下
+第六步，jvm看到person.name = “冯冬冬的IT技术栈”;person通过引用new Person实例的name属性，该name属性通过地址指向常量池的&amp;quot;冯冬冬的IT技术栈&amp;quot;。 第七步，jvm看到person.age = 18; person的age属性是基本数据类型，直接赋值。
+第八步，jvm看到person.walk(); 调用实例的方法时，并不会在实例对象中生成一个新的方法，而是通过地址指向方法区中类信息的方法。走到这一步再看看图怎么变化的
+  
+  JVM的位置
+  
+  
+  JVM的体系结构
+  
+  类加载器
+作用：加载Class文件 new Student()；
+  
+  虚拟机自带的加载器
+  启动类加载器
+  扩展类加载器EXC
+  应用程序加载器APP
+优先级从高到低，先调用高级的，没有就抛出异常
+双亲委派机制：安全
+ APP&amp;ndash;&amp;gt;EXC&amp;ndash;&amp;gt;BOOT(最终执行)    类加载器加载机制：</description>
+    </item>
+    
+    <item>
+      <title>SNN脉冲神经网络</title>
+      <link>https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</link>
+      <pubDate>Mon, 30 Nov 2020 21:08:13 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</guid>
+      <description>Spiking Neural Network（脉冲神经网络）简述 传统神经网络包括现存的各种以perceptron为基本单元的拓扑变种， 比如卷积神经网络系列（CNNs), 循环神经网络系列（RNNs）, 生成对抗网络（GANs）， 自编码器（Autoencoders) 等等。 因为反向传播算法的存在和各类数学优化器的发展， 使得第二代神经网络在各项任务上有着出色的表现。
+Spiking Neural Network(SNN) 被公认为继现有的MLP为基础的第二代神经网络(ANN)之后发展的第三代神经网络。虽然传统神经网络已然在各项任务上取得了优异的成绩， 但它们的原理和运算过程仍然和真正的人脑信息处理过程依然相差甚远。主要的差异可以总结为以下几点
+ 传统神经网络算法仍然依据于使用高精度的浮点数进行运算， 然而人脑并不会使用浮点数进行运算。 在人的传感系统和大脑中， 信息会以动作电压或称之为电脉冲（electric spike）的形式传递，接受，和处理。 ANN的训练过程对反向传播算法（梯度下降)的依赖程度非常之高， 然而在真实的人脑学习过程中，科学家们还没有观察到这种学习类型。 更多的， 人脑的记忆和学习依赖于突触后细胞受到刺激后所产生的突触可塑性。 详见： Hebbian learning ANN通常需要大量的标签数据集来驱动网络的拟合。 这与我们平时经理的有所不同。 我们在很多情况下的感知和学习过程都是非监督式的。并且， 人脑通常不需要如此大量反复的数据来学习同一件事情。  综上所述， 为了使神经网络更加接近于人脑， SNN随而诞生了。发现它的灵感，就来自于生物大脑处理信息的方式—spikes。 读到这里，就应该已经明白SNN并不是一个像CNN,RNN这样的网络结构， 而是一个新型的，更加接近人脑的一种神经网络算法的统称
+SNN和CNN的区别 1、信息载体 ​	首先， 最基本的区别是SNN和ANN的信息载体不一样。 ANN 使用的是高精度浮点数而SNN使用的是spikes 或可以理解为1和0，这就大大增加了信息在网络中的稀疏性。这些spike在网络中有相同的幅度和区间.
+  
+那么，在SNN中， 信息是如何用spike来表达的呢？ 这就涉及到脉冲编码的知识了。这里做简单介绍，之后我会再详细解释它。 在SNN中， 很重要的一点是引入了时序（temporal）相关的处理形式。 信息是被编码在脉冲序列的时间序列（spike train）中的。 例如： 高频率的一组脉冲序列可以代表一个较高的值而低频率的脉冲则代表低值。又例如： 在一个固定的时间窗中， 单个脉冲出现的位置也可以代表相应的值/信息。
+2、神经元 既然信息的载体不一样， 那么神经网络中的基本单元–神经元肯定也是不一样的。 对ANN有了解的同学们都知道， 基本神经元perceptron 是一个简单的 加乘运算器用来整合输入该神经元的值 而后接着一个非线性的激活方程（Non-linear activation function）。然而这种针对确切数值的运算并不适用于二进制脉冲的处理。 在SNN中， 基本的运算单元为以生物突触结构为基础构建的脉冲神经元（spiking neuron)。 想象有两个spiking neuron 其中一个为突触前神经元（pre-synaptic neuron）作为spiking的发出者， 一个为突触后神经元（post-synaptic neuron) 作为spike的接受者。 spiking neuron所进行的处理是接受由突触传递而来的脉冲， 依据突触权重通过spiking function产生突触后膜电压（post synaptic potential (PSP)）</description>
+    </item>
+    
+    <item>
+      <title>Java_多线程</title>
+      <link>https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+      <pubDate>Mon, 30 Nov 2020 20:39:38 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
+      <description>java多线程详解 三种创建方式   Thread class：继承Thread类(重点)，重写run()方法，创建一个线程对象，调用start()开启线程，线程不一定立即执行，cpu调度多线程
+  Runnable接口：实现Runnable接口(重点)，重写run方法，创建runnable接口的实现类对象，创建线程对象，通过线程对象来开启我们的线程，代理，调用start方法
+new Thread(testThread3).start
+  
+  Callable接口：实现Callable接口(了解)
+  
+好处：可以定义返回值，可以跑出异常
+  多个线程操作同一个资源的情况下，线程不安全，数据紊乱
+静态代理 婚庆公司！
+静态代理模式总结：
+真实对象和代理对象都要实现统一个接口，代理对象要代理真实角色
+代理对象可以做很多真实对象做不了的事情
+真实对象专注做自己的事情
+Lamda表达式 函数式 接口：
+  
+Lamda表达式
+  
+线程状态   
+  线程停止
+建议线程正常停止&amp;mdash;&amp;gt;利用次数，不建议死循环
+建议使用标志位&amp;mdash;&amp;gt;设置一个标志位
+不要使用stop或者destory等过时或者jdk不建议使用的方法。
+  线程休眠
+sleep指定当前线程阻塞的毫秒数
+  
+  线程礼让——yield
+  
+  线程强制执行——join
+想象为插队</description>
+    </item>
+    
+    <item>
+      <title>SGnet论文阅读</title>
+      <link>https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
       <pubDate>Sun, 29 Nov 2020 15:38:53 +0800</pubDate>
       
-      <guid>https://a447593787.github.io/p/sgnet/</guid>
+      <guid>https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</guid>
       <description>论文阅读笔记 TactileSGNet: A Spiking Graph Neural Network for Event-based Tactile Object Recognition event-driven或event-based
 SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输入，创建稀疏，无帧和精确定时的事件流，模型LIF和IF，我们把每个脉冲的产生看成一个事件，所以说SNN是以事件驱动的，事件驱动的神经元系统将其计算工作集中在网络的当前活动部分，由于输入是一连串的脉冲，所以可以看成整个网络的神经元都在进行工作，但他们只关注其自己当前所接受的东西，所以相对于ANN他是低延迟
 脉冲神经网络难点 网络训练的一般过程为：
@@ -39,15 +120,17 @@ SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输�
     </item>
     
     <item>
-      <title>测试文章</title>
-      <link>https://a447593787.github.io/p/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</link>
-      <pubDate>Mon, 19 Oct 2020 17:50:20 +0800</pubDate>
+      <title>java_duoxiancheng</title>
+      <link>https://a447593787.github.io/p/java_duoxiancheng/</link>
+      <pubDate>Mon, 16 Nov 2020 15:38:53 +0800</pubDate>
       
-      <guid>https://a447593787.github.io/p/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</guid>
+      <guid>https://a447593787.github.io/p/java_duoxiancheng/</guid>
       <description>java多线程详解 三种创建方式   Thread class：继承Thread类(重点)，重写run()方法，创建一个线程对象，调用start()开启线程，线程不一定立即执行，cpu调度多线程
   Runnable接口：实现Runnable接口(重点)，重写run方法，创建runnable接口的实现类对象，创建线程对象，通过线程对象来开启我们的线程，代理，调用start方法
 new Thread(testThread3).start
+  
   Callable接口：实现Callable接口(了解)
+  
 好处：可以定义返回值，可以跑出异常
   多个线程操作同一个资源的情况下，线程不安全，数据紊乱
 静态代理 婚庆公司！
@@ -56,52 +139,52 @@ new Thread(testThread3).start
 代理对象可以做很多真实对象做不了的事情
 真实对象专注做自己的事情
 Lamda表达式 函数式 接口：
+  
 Lamda表达式
-线程状态   线程停止
+  
+线程状态   
+  线程停止
 建议线程正常停止&amp;mdash;&amp;gt;利用次数，不建议死循环
 建议使用标志位&amp;mdash;&amp;gt;设置一个标志位
 不要使用stop或者destory等过时或者jdk不建议使用的方法。
   线程休眠
 sleep指定当前线程阻塞的毫秒数
+  
   线程礼让——yield
+  
   线程强制执行——join
-想象为插队
-  </description>
+想象为插队</description>
+    </item>
+    
+    <item>
+      <title>JUC并发编程</title>
+      <link>https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Mon, 16 Nov 2020 15:38:53 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</guid>
+      <description>JUC并发编程 1、什么是JUC 源码+官方文档
+  
+java.util 工具包、包、分类
+业务：普通的线程代码 Thread
+Runnable	没有返回值、效率相比Callable相对较低
+  
+2、线程和进程  线程、进程，如果不能使用一句话说出来的技术，不扎实。
+ 进程：一个程序，QQ.exe Music.exe 程序的集合；
+一个进程往往可以包含多个线程，至少包含一个！
+java默认有几个线程？2个 main、GC(垃圾回收)
+线程：开了一个京城Typora，写字，自动保存（线程负责的）
+Thread、Runnable、Callable
+Java真的可以开启线程吗
+开不了
+Java无法直接操作硬件，运行在jvm虚拟机上
+ 并发、并行
+ 并发编程：并发、并行
+并发（多线程操作同一个资源）
+并行（多个人一起行走）</description>
     </item>
     
     <item>
       <title>Chinese Test</title>
-      <link>https://a447593787.github.io/p/test-chinese/</link>
-      <pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://a447593787.github.io/p/test-chinese/</guid>
-      <description>java多线程详解 三种创建方式   Thread class：继承Thread类(重点)，重写run()方法，创建一个线程对象，调用start()开启线程，线程不一定立即执行，cpu调度多线程
-  Runnable接口：实现Runnable接口(重点)，重写run方法，创建runnable接口的实现类对象，创建线程对象，通过线程对象来开启我们的线程，代理，调用start方法
-new Thread(testThread3).start
-  Callable接口：实现Callable接口(了解)
-好处：可以定义返回值，可以跑出异常
-  多个线程操作同一个资源的情况下，线程不安全，数据紊乱
-静态代理 婚庆公司！
-静态代理模式总结：
-真实对象和代理对象都要实现统一个接口，代理对象要代理真实角色
-代理对象可以做很多真实对象做不了的事情
-真实对象专注做自己的事情
-Lamda表达式 函数式 接口：
-Lamda表达式
-线程状态   线程停止
-建议线程正常停止&amp;mdash;&amp;gt;利用次数，不建议死循环
-建议使用标志位&amp;mdash;&amp;gt;设置一个标志位
-不要使用stop或者destory等过时或者jdk不建议使用的方法。
-  线程休眠
-sleep指定当前线程阻塞的毫秒数
-  线程礼让——yield
-  线程强制执行——join
-想象为插队
-  </description>
-    </item>
-    
-    <item>
-      <title>java多线程入门</title>
       <link>https://a447593787.github.io/p/test-chinese/</link>
       <pubDate>Wed, 09 Sep 2020 00:00:00 +0000</pubDate>
       

@@ -6,11 +6,20 @@
     <description>Recent content in Categories on Weiliang Lin</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 29 Nov 2020 15:38:53 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 30 Nov 2020 21:13:29 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>sgnet</title>
+      <title>java</title>
+      <link>https://a447593787.github.io/categories/java/</link>
+      <pubDate>Mon, 30 Nov 2020 21:13:29 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/categories/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sgnet</title>
       <link>https://a447593787.github.io/categories/sgnet/</link>
-      <pubDate>Sun, 29 Nov 2020 15:38:53 +0800</pubDate>
+      <pubDate>Sun, 29 Nov 2020 22:14:14 +0800</pubDate>
       
       <guid>https://a447593787.github.io/categories/sgnet/</guid>
       <description></description>

@@ -23,11 +23,11 @@ SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输�
 ​	Taxel 其实是 tactile pixel 的缩写, 直译过来就是接触像素点。
 ​	在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构脉冲数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，脉冲神经网络也是事件驱动的，可以直接处理传感器提供的基于脉冲的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。
 ​	据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，特别是最近邻和最小生成树方法，可以获得更好的性能。
-背景和相关工作 ​	我们的工作结合了图形神经网络和脉冲神经网络在基于事件的触觉对象识别方面的最新进展。在下文中，我们简要概述了这些领域的背景和相关工作。请注意，这些研究领域是广泛的，由于空间的限制，我们涵盖了代表性的工作，并向想要更多细节的读者推荐更全面的调查文章。'><title>SGnet</title>
+背景和相关工作 ​	我们的工作结合了图形神经网络和脉冲神经网络在基于事件的触觉对象识别方面的最新进展。在下文中，我们简要概述了这些领域的背景和相关工作。请注意，这些研究领域是广泛的，由于空间的限制，我们涵盖了代表性的工作，并向想要更多细节的读者推荐更全面的调查文章。'><title>SGnet1234324</title>
     
     <link rel='canonical' href='https://a447593787.github.io/sgnet/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SGnet'>
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SGnet1234324'>
 <meta property='og:description' content='论文阅读笔记 TactileSGNet: A Spiking Graph Neural Network for Event-based Tactile Object Recognition event-driven或event-based
 SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输入，创建稀疏，无帧和精确定时的事件流，模型LIF和IF，我们把每个脉冲的产生看成一个事件，所以说SNN是以事件驱动的，事件驱动的神经元系统将其计算工作集中在网络的当前活动部分，由于输入是一连串的脉冲，所以可以看成整个网络的神经元都在进行工作，但他们只关注其自己当前所接受的东西，所以相对于ANN他是低延迟
 脉冲神经网络难点 网络训练的一般过程为：
@@ -53,8 +53,8 @@ SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输�
 背景和相关工作 ​	我们的工作结合了图形神经网络和脉冲神经网络在基于事件的触觉对象识别方面的最新进展。在下文中，我们简要概述了这些领域的背景和相关工作。请注意，这些研究领域是广泛的，由于空间的限制，我们涵盖了代表性的工作，并向想要更多细节的读者推荐更全面的调查文章。'>
 <meta property='og:url' content='https://a447593787.github.io/sgnet/'>
 <meta property='og:site_name' content='Weiliang Lin'>
-<meta property='og:type' content='article'><meta property='article:section' content='' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2020-11-16T15:38:53&#43;08:00'/><meta property='article:modified_time' content='2020-11-16T15:38:53&#43;08:00'/><meta property='og:image' content='https://a447593787.github.io/fig1.jpg' />
-<meta name="twitter:title" content="SGnet">
+<meta property='og:type' content='article'><meta property='article:section' content='' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2020-11-16T15:38:53&#43;08:00'/><meta property='article:modified_time' content='2020-11-16T15:38:53&#43;08:00'/><meta property='og:image' content='https://a447593787.github.io/sgnet/fig1.png' />
+<meta name="twitter:title" content="SGnet1234324">
 <meta name="twitter:description" content="论文阅读笔记 TactileSGNet: A Spiking Graph Neural Network for Event-based Tactile Object Recognition event-driven或event-based
 SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输入，创建稀疏，无帧和精确定时的事件流，模型LIF和IF，我们把每个脉冲的产生看成一个事件，所以说SNN是以事件驱动的，事件驱动的神经元系统将其计算工作集中在网络的当前活动部分，由于输入是一连串的脉冲，所以可以看成整个网络的神经元都在进行工作，但他们只关注其自己当前所接受的东西，所以相对于ANN他是低延迟
 脉冲神经网络难点 网络训练的一般过程为：
@@ -78,7 +78,7 @@ SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输�
 ​	在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构脉冲数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，脉冲神经网络也是事件驱动的，可以直接处理传感器提供的基于脉冲的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。
 ​	据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，特别是最近邻和最小生成树方法，可以获得更好的性能。
 背景和相关工作 ​	我们的工作结合了图形神经网络和脉冲神经网络在基于事件的触觉对象识别方面的最新进展。在下文中，我们简要概述了这些领域的背景和相关工作。请注意，这些研究领域是广泛的，由于空间的限制，我们涵盖了代表性的工作，并向想要更多细节的读者推荐更全面的调查文章。"><meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:image" content='https://a447593787.github.io/fig1.jpg' /></head><body class="article-page keep-sidebar">
+	<meta name="twitter:image" content='https://a447593787.github.io/sgnet/fig1.png' /></head><body class="article-page keep-sidebar">
         <div class="container flex on-phone--column align-items--flex-start extended ">
             <aside class="sidebar left-sidebar sticky">
     <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
@@ -170,8 +170,9 @@ SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输�
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            
-                <img src="fig1.jpg" loading="lazy" alt="Featured image of post SGnet" />
+            <img srcset="/sgnet/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_1024x0_resize_box_2.png 1024w, /sgnet/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_2000x0_resize_box_2.png 2000w"
+                    src="/sgnet/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_2000x0_resize_box_2.png" width="453" height="325" loading="lazy"
+                    alt="Featured image of post SGnet1234324" />
             
         </div>
     
@@ -180,15 +181,20 @@ SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输�
     
     <header class="article-category">
         
-            
-                <a href="https://a447593787.github.io/categories/sgnet/">sgnet</a>
+            <a href="https://a447593787.github.io/categories/sgnet/" 
+                    class="color-tag"
+                    data-image="/sgnet/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_20x20_fill_box_smart1_2.png" 
+                    data-key="" 
+                    data-hash="md5-R71CTgjW2XZabBmWjMXUVg==">
+                    Sgnet
+                </a>
             
         
     </header>
     
 
     <h2 class="article-title">
-        <a href="https://a447593787.github.io/sgnet/">SGnet</a>
+        <a href="https://a447593787.github.io/sgnet/">SGnet1234324</a>
     </h2>
 
     <footer class="article-time">

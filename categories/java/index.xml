@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>java on Weiliang Lin</title>
+    <link>https://a447593787.github.io/categories/java/</link>
+    <description>Recent content in java on Weiliang Lin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 30 Nov 2020 21:13:29 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>JVM</title>
+      <link>https://a447593787.github.io/p/jvm/</link>
+      <pubDate>Mon, 30 Nov 2020 21:13:29 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/p/jvm/</guid>
+      <description>JVM虚拟机 JAVA内存分析   
+第一步，JVM去方法区寻找Test类的代码信息，如果有直接调用，没有的话使用类的加载机制把类加载进来。同时把静态变量、静态方法、常量加载进来。这里加载的是（“冯冬冬的IT技术栈”，“冯XX”）；这是因为字符串是常量，age中的18是基本类型。 第二步，jvm进入main方法，看到Person person=new Person()。首先分析Person这个类，同样的寻找Person类的代码信息，有就加载，没有的话类加载机制加载进来。同时也加载静态变量、静态方法、常量（“我正在走路。。。”） 第三步，jvm接下来看到了person，person在main方法内部，因而是局部变量，存放在栈空间中。 第四步，jvm接下来看到了new Person()。new出的对象（实例），存放在堆空间中。
+第五步，jvm接下来看到了“=”，把new Person的地址告诉person变量，person通过四字节的地址（十六进制），引用该实例。 是不是有点晕，别着急，画个图看一下
+第六步，jvm看到person.name = “冯冬冬的IT技术栈”;person通过引用new Person实例的name属性，该name属性通过地址指向常量池的&amp;quot;冯冬冬的IT技术栈&amp;quot;。 第七步，jvm看到person.age = 18; person的age属性是基本数据类型，直接赋值。
+第八步，jvm看到person.walk(); 调用实例的方法时，并不会在实例对象中生成一个新的方法，而是通过地址指向方法区中类信息的方法。走到这一步再看看图怎么变化的
+  
+  JVM的位置
+  
+  
+  JVM的体系结构
+  
+  类加载器
+作用：加载Class文件 new Student()；
+  
+  虚拟机自带的加载器
+  启动类加载器
+  扩展类加载器EXC
+  应用程序加载器APP
+优先级从高到低，先调用高级的，没有就抛出异常
+双亲委派机制：安全
+ APP&amp;ndash;&amp;gt;EXC&amp;ndash;&amp;gt;BOOT(最终执行)    类加载器加载机制：</description>
+    </item>
+    
+    <item>
+      <title>Java_多线程</title>
+      <link>https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+      <pubDate>Mon, 30 Nov 2020 20:39:38 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/p/java_%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
+      <description>java多线程详解 三种创建方式   Thread class：继承Thread类(重点)，重写run()方法，创建一个线程对象，调用start()开启线程，线程不一定立即执行，cpu调度多线程
+  Runnable接口：实现Runnable接口(重点)，重写run方法，创建runnable接口的实现类对象，创建线程对象，通过线程对象来开启我们的线程，代理，调用start方法
+new Thread(testThread3).start
+  
+  Callable接口：实现Callable接口(了解)
+  
+好处：可以定义返回值，可以跑出异常
+  多个线程操作同一个资源的情况下，线程不安全，数据紊乱
+静态代理 婚庆公司！
+静态代理模式总结：
+真实对象和代理对象都要实现统一个接口，代理对象要代理真实角色
+代理对象可以做很多真实对象做不了的事情
+真实对象专注做自己的事情
+Lamda表达式 函数式 接口：
+  
+Lamda表达式
+  
+线程状态   
+  线程停止
+建议线程正常停止&amp;mdash;&amp;gt;利用次数，不建议死循环
+建议使用标志位&amp;mdash;&amp;gt;设置一个标志位
+不要使用stop或者destory等过时或者jdk不建议使用的方法。
+  线程休眠
+sleep指定当前线程阻塞的毫秒数
+  
+  线程礼让——yield
+  
+  线程强制执行——join
+想象为插队</description>
+    </item>
+    
+    <item>
+      <title>java_duoxiancheng</title>
+      <link>https://a447593787.github.io/p/java_duoxiancheng/</link>
+      <pubDate>Mon, 16 Nov 2020 15:38:53 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/p/java_duoxiancheng/</guid>
+      <description>java多线程详解 三种创建方式   Thread class：继承Thread类(重点)，重写run()方法，创建一个线程对象，调用start()开启线程，线程不一定立即执行，cpu调度多线程
+  Runnable接口：实现Runnable接口(重点)，重写run方法，创建runnable接口的实现类对象，创建线程对象，通过线程对象来开启我们的线程，代理，调用start方法
+new Thread(testThread3).start
+  
+  Callable接口：实现Callable接口(了解)
+  
+好处：可以定义返回值，可以跑出异常
+  多个线程操作同一个资源的情况下，线程不安全，数据紊乱
+静态代理 婚庆公司！
+静态代理模式总结：
+真实对象和代理对象都要实现统一个接口，代理对象要代理真实角色
+代理对象可以做很多真实对象做不了的事情
+真实对象专注做自己的事情
+Lamda表达式 函数式 接口：
+  
+Lamda表达式
+  
+线程状态   
+  线程停止
+建议线程正常停止&amp;mdash;&amp;gt;利用次数，不建议死循环
+建议使用标志位&amp;mdash;&amp;gt;设置一个标志位
+不要使用stop或者destory等过时或者jdk不建议使用的方法。
+  线程休眠
+sleep指定当前线程阻塞的毫秒数
+  
+  线程礼让——yield
+  
+  线程强制执行——join
+想象为插队</description>
+    </item>
+    
+    <item>
+      <title>JUC并发编程</title>
+      <link>https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Mon, 16 Nov 2020 15:38:53 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/p/juc%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</guid>
+      <description>JUC并发编程 1、什么是JUC 源码+官方文档
+  
+java.util 工具包、包、分类
+业务：普通的线程代码 Thread
+Runnable	没有返回值、效率相比Callable相对较低
+  
+2、线程和进程  线程、进程，如果不能使用一句话说出来的技术，不扎实。
+ 进程：一个程序，QQ.exe Music.exe 程序的集合；
+一个进程往往可以包含多个线程，至少包含一个！
+java默认有几个线程？2个 main、GC(垃圾回收)
+线程：开了一个京城Typora，写字，自动保存（线程负责的）
+Thread、Runnable、Callable
+Java真的可以开启线程吗
+开不了
+Java无法直接操作硬件，运行在jvm虚拟机上
+ 并发、并行
+ 并发编程：并发、并行
+并发（多线程操作同一个资源）
+并行（多个人一起行走）</description>
+    </item>
+    
+  </channel>
+</rss>

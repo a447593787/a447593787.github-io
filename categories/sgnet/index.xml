@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>sgnet on Weiliang Lin</title>
+    <title>Sgnet on Weiliang Lin</title>
     <link>https://a447593787.github.io/categories/sgnet/</link>
-    <description>Recent content in sgnet on Weiliang Lin</description>
+    <description>Recent content in Sgnet on Weiliang Lin</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 29 Nov 2020 15:38:53 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/categories/sgnet/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 29 Nov 2020 22:14:14 +0800</lastBuildDate><atom:link href="https://a447593787.github.io/categories/sgnet/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>SGnet</title>
-      <link>https://a447593787.github.io/p/sgnet/</link>
+      <title>SNN脉冲神经网络</title>
+      <link>https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</link>
+      <pubDate>Mon, 30 Nov 2020 21:08:13 +0800</pubDate>
+      
+      <guid>https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</guid>
+      <description>Spiking Neural Network（脉冲神经网络）简述 传统神经网络包括现存的各种以perceptron为基本单元的拓扑变种， 比如卷积神经网络系列（CNNs), 循环神经网络系列（RNNs）, 生成对抗网络（GANs）， 自编码器（Autoencoders) 等等。 因为反向传播算法的存在和各类数学优化器的发展， 使得第二代神经网络在各项任务上有着出色的表现。
+Spiking Neural Network(SNN) 被公认为继现有的MLP为基础的第二代神经网络(ANN)之后发展的第三代神经网络。虽然传统神经网络已然在各项任务上取得了优异的成绩， 但它们的原理和运算过程仍然和真正的人脑信息处理过程依然相差甚远。主要的差异可以总结为以下几点
+ 传统神经网络算法仍然依据于使用高精度的浮点数进行运算， 然而人脑并不会使用浮点数进行运算。 在人的传感系统和大脑中， 信息会以动作电压或称之为电脉冲（electric spike）的形式传递，接受，和处理。 ANN的训练过程对反向传播算法（梯度下降)的依赖程度非常之高， 然而在真实的人脑学习过程中，科学家们还没有观察到这种学习类型。 更多的， 人脑的记忆和学习依赖于突触后细胞受到刺激后所产生的突触可塑性。 详见： Hebbian learning ANN通常需要大量的标签数据集来驱动网络的拟合。 这与我们平时经理的有所不同。 我们在很多情况下的感知和学习过程都是非监督式的。并且， 人脑通常不需要如此大量反复的数据来学习同一件事情。  综上所述， 为了使神经网络更加接近于人脑， SNN随而诞生了。发现它的灵感，就来自于生物大脑处理信息的方式—spikes。 读到这里，就应该已经明白SNN并不是一个像CNN,RNN这样的网络结构， 而是一个新型的，更加接近人脑的一种神经网络算法的统称
+SNN和CNN的区别 1、信息载体 ​	首先， 最基本的区别是SNN和ANN的信息载体不一样。 ANN 使用的是高精度浮点数而SNN使用的是spikes 或可以理解为1和0，这就大大增加了信息在网络中的稀疏性。这些spike在网络中有相同的幅度和区间.
+  
+那么，在SNN中， 信息是如何用spike来表达的呢？ 这就涉及到脉冲编码的知识了。这里做简单介绍，之后我会再详细解释它。 在SNN中， 很重要的一点是引入了时序（temporal）相关的处理形式。 信息是被编码在脉冲序列的时间序列（spike train）中的。 例如： 高频率的一组脉冲序列可以代表一个较高的值而低频率的脉冲则代表低值。又例如： 在一个固定的时间窗中， 单个脉冲出现的位置也可以代表相应的值/信息。
+2、神经元 既然信息的载体不一样， 那么神经网络中的基本单元–神经元肯定也是不一样的。 对ANN有了解的同学们都知道， 基本神经元perceptron 是一个简单的 加乘运算器用来整合输入该神经元的值 而后接着一个非线性的激活方程（Non-linear activation function）。然而这种针对确切数值的运算并不适用于二进制脉冲的处理。 在SNN中， 基本的运算单元为以生物突触结构为基础构建的脉冲神经元（spiking neuron)。 想象有两个spiking neuron 其中一个为突触前神经元（pre-synaptic neuron）作为spiking的发出者， 一个为突触后神经元（post-synaptic neuron) 作为spike的接受者。 spiking neuron所进行的处理是接受由突触传递而来的脉冲， 依据突触权重通过spiking function产生突触后膜电压（post synaptic potential (PSP)）</description>
+    </item>
+    
+    <item>
+      <title>SGnet论文阅读</title>
+      <link>https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
       <pubDate>Sun, 29 Nov 2020 15:38:53 +0800</pubDate>
       
-      <guid>https://a447593787.github.io/p/sgnet/</guid>
+      <guid>https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</guid>
       <description>论文阅读笔记 TactileSGNet: A Spiking Graph Neural Network for Event-based Tactile Object Recognition event-driven或event-based
 SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输入，创建稀疏，无帧和精确定时的事件流，模型LIF和IF，我们把每个脉冲的产生看成一个事件，所以说SNN是以事件驱动的，事件驱动的神经元系统将其计算工作集中在网络的当前活动部分，由于输入是一连串的脉冲，所以可以看成整个网络的神经元都在进行工作，但他们只关注其自己当前所接受的东西，所以相对于ANN他是低延迟
 脉冲神经网络难点 网络训练的一般过程为：
@@ -39,7 +54,7 @@ SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输�
     </item>
     
     <item>
-      <title>SGnet</title>
+      <title>SGnet1234324</title>
       <link>https://a447593787.github.io/sgnet/</link>
       <pubDate>Mon, 16 Nov 2020 15:38:53 +0800</pubDate>
       

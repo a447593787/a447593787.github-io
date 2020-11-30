@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='论文阅读笔记 TactileSGNet: A Spiking Graph Neural Network for Event-based Tactile Object Recognition event-driven或event-based
+SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输入，创建稀疏，无帧和精确定时的事件流，模型LIF和IF，我们把每个脉冲的产生看成一个事件，所以说SNN是以事件驱动的，事件驱动的神经元系统将其计算工作集中在网络的当前活动部分，由于输入是一连串的脉冲，所以可以看成整个网络的神经元都在进行工作，但他们只关注其自己当前所接受的东西，所以相对于ANN他是低延迟
+脉冲神经网络难点 网络训练的一般过程为：
+（一） 确定编码方式，将样本数据编码为脉冲序列（得到Si（t））
+（二） 将脉冲序列输入脉冲神经网络计算得输出脉冲序列So（t）；
+（三） 将期望脉冲序列和实际输出脉冲序列对比得到误差，并根据误差调整W。
+从上面过程可总结脉冲神经网络的实现中有几个难点：
+（一） 如何确定编码方式，即如何将样本信息合理地转化为脉冲序列进行训练；
+（二） 如何设计脉冲神经元模型，如何模拟脉冲神经网络；
+（三） 如何度量实际输出脉冲序列和期望输出脉冲序列误差，即误差函数的合理的定义
+当前对上述难点的解决方案：
+（一） 延迟编码、相位编码、Time-to-First.Spike编码、BsA(Bens Spike AlgoIithm)编码等时间编码策略。
+（二） LIF，IF，IM，HH模型等；
+（三） 误差定义（举例）
+摘要 ​	触觉对于各种机器人任务来说是至关重要的，包括抓取和手动操作。灵活的、事件驱动的电子皮肤的新进展可能很快会赋予机器人与人类相似的触摸感知能力。这些电子皮肤对变化(例如，压力、温度)做出异步响应，并且可以不规则地布置在机器人的身体或末端执行器上。
+​	然而，这些独特的特征可能使得当前的深度学习方法(例如卷积特征提取器)不适用于触觉学习。本文提出了一种基于事件的触觉对象识别的脉冲图神经网络。为了利用taxels的局部连通性，我们提出了几种在图形结构中组织触觉数据的方法。基于构造的图，我们开发了一个脉冲图卷积网络。
+​	脉冲神经网络的事件驱动性质使其更适合处理基于事件的数据。在两个触觉数据集上的实验结果表明，该方法优于其他先进的脉冲方法，在对各种不同的家居对象进行分类时，准确率达到90%左右。
+介绍 ​	物体识别是一项基本的感知技能，它是许多任务的基础，从开车到做饭。机器视觉的进步为机器人提供了出色的视觉对象识别能力(例如，[1]，[2])。但是，虽然视觉是一种重要的视觉形式，但它可能无法区分具有相似视觉特征的物体，或者在不太有利的条件下，例如在弱光或遮挡下。在这种情况下，触觉传感可以提供重要的信息(例如，纹理、粗糙度、摩擦)，这些信息已经应用于各种任务，包括对象识别[3]、[4]、[5]、滑动检测[6]和纹理识别[7]。
+​	这项研究的重点是具有挑战性的任务，基于触摸的物体识别与事件驱动的触觉传感器[8]，[9]。先前的工作(例如[7]、[4]、[3])主要使用标准的同步触觉传感器和传统的机器学习方法(例如卷积神经网络[10])。然而，事件驱动传感器本质上是不同的，无论是在操作还是提供的数据方面。类似于基于事件的摄像机[11]，[12]，事件触觉传感器异步报告环境中的变化，从而提供基于事件的“脉冲”，其中每个taxel独立于其他taxel而触发。与标准的基于同步帧的传感器相比，事件驱动传感可以实现更高的能效、更好的可扩展性和更低的延迟。然而，用这些传感器学习仍然处于初级阶段[13]。
+​	Taxel 其实是 tactile pixel 的缩写, 直译过来就是接触像素点。
+​	在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构脉冲数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，脉冲神经网络也是事件驱动的，可以直接处理传感器提供的基于脉冲的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。
+​	据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，特别是最近邻和最小生成树方法，可以获得更好的性能。
+背景和相关工作 ​	我们的工作结合了图形神经网络和脉冲神经网络在基于事件的触觉对象识别方面的最新进展。在下文中，我们简要概述了这些领域的背景和相关工作。请注意，这些研究领域是广泛的，由于空间的限制，我们涵盖了代表性的工作，并向想要更多细节的读者推荐更全面的调查文章。'><title>SGnet论文阅读</title>
+    
+    <link rel='canonical' href='https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='SGnet论文阅读'>
+<meta property='og:description' content='论文阅读笔记 TactileSGNet: A Spiking Graph Neural Network for Event-based Tactile Object Recognition event-driven或event-based
+SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输入，创建稀疏，无帧和精确定时的事件流，模型LIF和IF，我们把每个脉冲的产生看成一个事件，所以说SNN是以事件驱动的，事件驱动的神经元系统将其计算工作集中在网络的当前活动部分，由于输入是一连串的脉冲，所以可以看成整个网络的神经元都在进行工作，但他们只关注其自己当前所接受的东西，所以相对于ANN他是低延迟
+脉冲神经网络难点 网络训练的一般过程为：
+（一） 确定编码方式，将样本数据编码为脉冲序列（得到Si（t））
+（二） 将脉冲序列输入脉冲神经网络计算得输出脉冲序列So（t）；
+（三） 将期望脉冲序列和实际输出脉冲序列对比得到误差，并根据误差调整W。
+从上面过程可总结脉冲神经网络的实现中有几个难点：
+（一） 如何确定编码方式，即如何将样本信息合理地转化为脉冲序列进行训练；
+（二） 如何设计脉冲神经元模型，如何模拟脉冲神经网络；
+（三） 如何度量实际输出脉冲序列和期望输出脉冲序列误差，即误差函数的合理的定义
+当前对上述难点的解决方案：
+（一） 延迟编码、相位编码、Time-to-First.Spike编码、BsA(Bens Spike AlgoIithm)编码等时间编码策略。
+（二） LIF，IF，IM，HH模型等；
+（三） 误差定义（举例）
+摘要 ​	触觉对于各种机器人任务来说是至关重要的，包括抓取和手动操作。灵活的、事件驱动的电子皮肤的新进展可能很快会赋予机器人与人类相似的触摸感知能力。这些电子皮肤对变化(例如，压力、温度)做出异步响应，并且可以不规则地布置在机器人的身体或末端执行器上。
+​	然而，这些独特的特征可能使得当前的深度学习方法(例如卷积特征提取器)不适用于触觉学习。本文提出了一种基于事件的触觉对象识别的脉冲图神经网络。为了利用taxels的局部连通性，我们提出了几种在图形结构中组织触觉数据的方法。基于构造的图，我们开发了一个脉冲图卷积网络。
+​	脉冲神经网络的事件驱动性质使其更适合处理基于事件的数据。在两个触觉数据集上的实验结果表明，该方法优于其他先进的脉冲方法，在对各种不同的家居对象进行分类时，准确率达到90%左右。
+介绍 ​	物体识别是一项基本的感知技能，它是许多任务的基础，从开车到做饭。机器视觉的进步为机器人提供了出色的视觉对象识别能力(例如，[1]，[2])。但是，虽然视觉是一种重要的视觉形式，但它可能无法区分具有相似视觉特征的物体，或者在不太有利的条件下，例如在弱光或遮挡下。在这种情况下，触觉传感可以提供重要的信息(例如，纹理、粗糙度、摩擦)，这些信息已经应用于各种任务，包括对象识别[3]、[4]、[5]、滑动检测[6]和纹理识别[7]。
+​	这项研究的重点是具有挑战性的任务，基于触摸的物体识别与事件驱动的触觉传感器[8]，[9]。先前的工作(例如[7]、[4]、[3])主要使用标准的同步触觉传感器和传统的机器学习方法(例如卷积神经网络[10])。然而，事件驱动传感器本质上是不同的，无论是在操作还是提供的数据方面。类似于基于事件的摄像机[11]，[12]，事件触觉传感器异步报告环境中的变化，从而提供基于事件的“脉冲”，其中每个taxel独立于其他taxel而触发。与标准的基于同步帧的传感器相比，事件驱动传感可以实现更高的能效、更好的可扩展性和更低的延迟。然而，用这些传感器学习仍然处于初级阶段[13]。
+​	Taxel 其实是 tactile pixel 的缩写, 直译过来就是接触像素点。
+​	在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构脉冲数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，脉冲神经网络也是事件驱动的，可以直接处理传感器提供的基于脉冲的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。
+​	据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，特别是最近邻和最小生成树方法，可以获得更好的性能。
+背景和相关工作 ​	我们的工作结合了图形神经网络和脉冲神经网络在基于事件的触觉对象识别方面的最新进展。在下文中，我们简要概述了这些领域的背景和相关工作。请注意，这些研究领域是广泛的，由于空间的限制，我们涵盖了代表性的工作，并向想要更多细节的读者推荐更全面的调查文章。'>
+<meta property='og:url' content='https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/'>
+<meta property='og:site_name' content='Weiliang Lin'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='论文阅读' /><meta property='article:published_time' content='2020-11-29T15:38:53&#43;08:00'/><meta property='article:modified_time' content='2020-11-29T15:38:53&#43;08:00'/><meta property='og:image' content='https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1.png' />
+<meta name="twitter:title" content="SGnet论文阅读">
+<meta name="twitter:description" content="论文阅读笔记 TactileSGNet: A Spiking Graph Neural Network for Event-based Tactile Object Recognition event-driven或event-based
+SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输入，创建稀疏，无帧和精确定时的事件流，模型LIF和IF，我们把每个脉冲的产生看成一个事件，所以说SNN是以事件驱动的，事件驱动的神经元系统将其计算工作集中在网络的当前活动部分，由于输入是一连串的脉冲，所以可以看成整个网络的神经元都在进行工作，但他们只关注其自己当前所接受的东西，所以相对于ANN他是低延迟
+脉冲神经网络难点 网络训练的一般过程为：
+（一） 确定编码方式，将样本数据编码为脉冲序列（得到Si（t））
+（二） 将脉冲序列输入脉冲神经网络计算得输出脉冲序列So（t）；
+（三） 将期望脉冲序列和实际输出脉冲序列对比得到误差，并根据误差调整W。
+从上面过程可总结脉冲神经网络的实现中有几个难点：
+（一） 如何确定编码方式，即如何将样本信息合理地转化为脉冲序列进行训练；
+（二） 如何设计脉冲神经元模型，如何模拟脉冲神经网络；
+（三） 如何度量实际输出脉冲序列和期望输出脉冲序列误差，即误差函数的合理的定义
+当前对上述难点的解决方案：
+（一） 延迟编码、相位编码、Time-to-First.Spike编码、BsA(Bens Spike AlgoIithm)编码等时间编码策略。
+（二） LIF，IF，IM，HH模型等；
+（三） 误差定义（举例）
+摘要 ​	触觉对于各种机器人任务来说是至关重要的，包括抓取和手动操作。灵活的、事件驱动的电子皮肤的新进展可能很快会赋予机器人与人类相似的触摸感知能力。这些电子皮肤对变化(例如，压力、温度)做出异步响应，并且可以不规则地布置在机器人的身体或末端执行器上。
+​	然而，这些独特的特征可能使得当前的深度学习方法(例如卷积特征提取器)不适用于触觉学习。本文提出了一种基于事件的触觉对象识别的脉冲图神经网络。为了利用taxels的局部连通性，我们提出了几种在图形结构中组织触觉数据的方法。基于构造的图，我们开发了一个脉冲图卷积网络。
+​	脉冲神经网络的事件驱动性质使其更适合处理基于事件的数据。在两个触觉数据集上的实验结果表明，该方法优于其他先进的脉冲方法，在对各种不同的家居对象进行分类时，准确率达到90%左右。
+介绍 ​	物体识别是一项基本的感知技能，它是许多任务的基础，从开车到做饭。机器视觉的进步为机器人提供了出色的视觉对象识别能力(例如，[1]，[2])。但是，虽然视觉是一种重要的视觉形式，但它可能无法区分具有相似视觉特征的物体，或者在不太有利的条件下，例如在弱光或遮挡下。在这种情况下，触觉传感可以提供重要的信息(例如，纹理、粗糙度、摩擦)，这些信息已经应用于各种任务，包括对象识别[3]、[4]、[5]、滑动检测[6]和纹理识别[7]。
+​	这项研究的重点是具有挑战性的任务，基于触摸的物体识别与事件驱动的触觉传感器[8]，[9]。先前的工作(例如[7]、[4]、[3])主要使用标准的同步触觉传感器和传统的机器学习方法(例如卷积神经网络[10])。然而，事件驱动传感器本质上是不同的，无论是在操作还是提供的数据方面。类似于基于事件的摄像机[11]，[12]，事件触觉传感器异步报告环境中的变化，从而提供基于事件的“脉冲”，其中每个taxel独立于其他taxel而触发。与标准的基于同步帧的传感器相比，事件驱动传感可以实现更高的能效、更好的可扩展性和更低的延迟。然而，用这些传感器学习仍然处于初级阶段[13]。
+​	Taxel 其实是 tactile pixel 的缩写, 直译过来就是接触像素点。
+​	在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构脉冲数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，脉冲神经网络也是事件驱动的，可以直接处理传感器提供的基于脉冲的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。
+​	据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，特别是最近邻和最小生成树方法，可以获得更好的性能。
+背景和相关工作 ​	我们的工作结合了图形神经网络和脉冲神经网络在基于事件的触觉对象识别方面的最新进展。在下文中，我们简要概述了这些领域的背景和相关工作。请注意，这些研究领域是广泛的，由于空间的限制，我们涵盖了代表性的工作，并向想要更多细节的读者推荐更全面的调查文章。"><meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content='https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1.png' /></head><body class="">
+        <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+
+                
+                    
+                    <img src="/img/avatar_hu845b293eecd45ac4681077b7c8b17649_46149_300x300_resize_box_2.png" width="300"
+                        height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+
+                <span class="emoji">🍥</span>
+            </figure>
+        
+        <h1 class="site-name"><a href="https://a447593787.github.io/">Weiliang Lin</a></h1>
+        <h2 class="site-description">Ysu Lin Wei Liang&#39;s personal blog</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://a447593787.github.io/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="https://a447593787.github.io/" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <img srcset="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_1024x0_resize_box_2.png 1024w, /p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_2000x0_resize_box_2.png 2000w"
+                    src="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_2000x0_resize_box_2.png" width="453" height="325" loading="lazy"
+                    alt="Featured image of post SGnet论文阅读" />
+            
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="https://a447593787.github.io/categories/sgnet/" 
+                    class="color-tag"
+                    data-image="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_20x20_fill_box_smart1_2.png" 
+                    data-key="" 
+                    data-hash="md5-R71CTgjW2XZabBmWjMXUVg==">
+                    Sgnet
+                </a>
+            
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="https://a447593787.github.io/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">SGnet论文阅读</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Nov 29, 2020</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="论文阅读笔记">论文阅读笔记</h1>
+<h1 id="tactilesgnet-a-spiking-graph-neural-network-for-event-based-tactile-object-recognition">TactileSGNet: A Spiking Graph Neural Network for Event-based Tactile Object Recognition</h1>
+<p>event-driven或event-based</p>
+<p>SNN运行平台由来自神经形态传感器或将图片转换成脉冲的输入，创建稀疏，无帧和精确定时的事件流，模型LIF和IF，我们把每个脉冲的产生看成一个事件，所以说SNN是以事件驱动的，事件驱动的神经元系统将其计算工作集中在网络的当前活动部分，由于输入是一连串的脉冲，所以可以看成整个网络的神经元都在进行工作，但他们只关注其自己当前所接受的东西，所以相对于ANN他是低延迟</p>
+<h2 id="脉冲神经网络难点">脉冲神经网络难点</h2>
+<p>网络训练的一般过程为：</p>
+<p>（一） 确定编码方式，将样本数据编码为脉冲序列（得到Si（t））</p>
+<p>（二） 将脉冲序列输入脉冲神经网络计算得输出脉冲序列So（t）；</p>
+<p>（三） 将期望脉冲序列和实际输出脉冲序列对比得到误差，并根据误差调整W。</p>
+<p>从上面过程可总结脉冲神经网络的实现中有几个难点：</p>
+<p>（一）  如何确定<strong>编码方式</strong>，即如何将样本信息合理地转化为脉冲序列进行训练；</p>
+<p>（二）  如何设计脉冲神经元<strong>模型</strong>，如何模拟脉冲神经网络；</p>
+<p>（三）  如何度量实际输出脉冲序列和期望输出脉冲序列<strong>误差</strong>，即误差函数的合理的定义</p>
+<p>当前对上述难点的解决方案：</p>
+<p>（一）  延迟编码、相位编码、Time-to-First.Spike编码、BsA(Bens Spike AlgoIithm)编码等时间编码策略。</p>
+<p>（二）  LIF，IF，IM，HH模型等；</p>
+<p>（三）  误差定义（举例）</p>
+<h2 id="摘要">摘要</h2>
+<p>​		触觉对于各种机器人任务来说是至关重要的，包括抓取和手动操作。灵活的、事件驱动的电子皮肤的新进展可能很快会赋予机器人与人类相似的触摸感知能力。这些电子皮肤对变化(例如，压力、温度)做出异步响应，并且可以不规则地布置在机器人的身体或末端执行器上。</p>
+<p>​		然而，这些独特的特征可能使得当前的深度学习方法(例如卷积特征提取器)不适用于触觉学习。本文提出了一种基于事件的触觉对象识别的脉冲图神经网络。为了利用taxels的局部连通性，我们提出了几种在图形结构中组织触觉数据的方法。基于构造的图，我们开发了一个脉冲图卷积网络。</p>
+<p>​		脉冲神经网络的事件驱动性质使其更适合处理基于事件的数据。在两个触觉数据集上的实验结果表明，该方法优于其他先进的脉冲方法，在对各种不同的家居对象进行分类时，准确率达到90%左右。</p>
+<h2 id="介绍">介绍</h2>
+<p>​		物体识别是一项基本的感知技能，它是许多任务的基础，从开车到做饭。机器视觉的进步为机器人提供了出色的视觉对象识别能力(例如，[1]，[2])。但是，虽然视觉是一种重要的视觉形式，但它可能无法区分具有相似视觉特征的物体，或者在不太有利的条件下，例如在弱光或遮挡下。在这种情况下，触觉传感可以提供重要的信息(例如，纹理、粗糙度、摩擦)，这些信息已经应用于各种任务，包括对象识别[3]、[4]、[5]、滑动检测[6]和纹理识别[7]。</p>
+<p>​		这项研究的重点是具有挑战性的任务，基于触摸的物体识别与事件驱动的触觉传感器[8]，[9]。先前的工作(例如[7]、[4]、[3])主要使用标准的同步触觉传感器和传统的机器学习方法(例如卷积神经网络[10])。然而，事件驱动传感器本质上是不同的，无论是在操作还是提供的数据方面。类似于基于事件的摄像机[11]，[12]，事件触觉传感器异步报告环境中的变化，从而提供基于事件的“脉冲”，其中每个taxel独立于其他taxel而触发。与标准的基于同步帧的传感器相比，事件驱动传感可以实现更高的能效、更好的可扩展性和更低的延迟。然而，用这些传感器学习仍然处于初级阶段[13]。</p>
+<p>​		Taxel 其实是 <strong>tactile pixel</strong> 的缩写, 直译过来就是接触像素点。</p>
+<p>​		在本文中，我们提出了触觉神经网络，一种新的基于事件的触觉数据识别目标的脉冲图形神经网络。与网格结构实值数据的卷积神经网络不同，我们的模型对图结构脉冲数据进行操作。这提供了两个关键优势:首先，该模型可以更好地利用高度不规则的局部taxel结构，例如，具有生物启发的配置或缠绕在末端执行器周围的灵活传感器。第二，脉冲神经网络也是事件驱动的，可以直接处理传感器提供的基于脉冲的数据；这绕过了从离散事件到实值帧的潜在昂贵的转换。此外，SNN可以在高能效的神经形态处理器上运行，如IBM TrueNorth [14]和Intel Loihi [15]。</p>
+<p>​		据我们所知，TactileSGNet是第一个用于触觉数据的事件驱动图形神经网络。一个相关的模型是最近提出的触觉网络[16]，它使用图形卷积网络(GCN) [17]进行触觉对象识别。这项工作的主要区别是，战术神经网络是事件驱动的(具有尖峰神经元)，我们利用拓扑自适应图卷积网络(TACNN)[18]；之前已经证明，TAGCN实现了卓越的性能，同时与标准GCN相比，计算效率更高。事实上，我们在两个现有的基于事件的触觉数据集上使用NeuTouch传感器进行的计算实验[8]表明，利用具有尖峰神经元的TAGCN实现了优于其他流行架构的性能。我们还试验了构建触觉图形的替代方法；结果表明，特别是最近邻和最小生成树方法，可以获得更好的性能。</p>
+<h2 id="背景和相关工作">背景和相关工作</h2>
+<p>​		我们的工作结合了图形神经网络和脉冲神经网络在基于事件的触觉对象识别方面的最新进展。在下文中，我们简要概述了这些领域的背景和相关工作。请注意，这些研究领域是广泛的，由于空间的限制，我们涵盖了代表性的工作，并向想要更多细节的读者推荐更全面的调查文章。</p>
+<p><figure>
+		<a href="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1.png" data-size="453x325">
+			<img srcset="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_480x0_resize_box_2.png 480w, /p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_1024x0_resize_box_2.png 1024w"
+				src="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig1.png" width="453" height="325" loading="lazy"
+				alt="&nbsp;">
+		</a>
+		
+	</figure></p>
+<p>​		触觉感知。触觉感知提供了不同于视觉感知的信息形态(例如粗糙度、纹理、温度)；融入触觉使机器人能够更好地感知物理环境。触觉已经在许多机器人任务中得到应用，如物体识别[3]、[4]、[5]、滑动检测[6]和纹理识别[7]。</p>
+<p>​		迄今为止，已经开发了几种类型的触觉传感器(见[19]的调查)；流行的传感器包括BioTac1、PPS2h和Tekscan3。在这篇文章中，我们重点讨论了使用NeuTouch，这是一种基于事件的触觉传感器，在最近的工作中已经提出[8]。以前很少有基于事件的触觉数据的学习工作。最近的工作[8]提出了一个基于二语习得的多模态尖峰网络[20]。我们的工作与众不同之处在于，我们探索了具有LIF(漏积分-点火)[21]神经元而不是SRM(尖峰响应模型)神经元的图形尖峰神经网络(而不是完全连接的层)[22]</p>
+<p>​		图形神经网络(GNNs)是一类结合深度学习模型和结构化数据方法的模型[23]。GNNs最近因其在许多领域的适用性而变得流行，从社交网络挖掘到将逻辑嵌入深层网络[24]。对这项工作特别感兴趣的是卷积运算通过可训练的图形滤波器在谱域中进行的GCNs[25]，[26]。为了降低频域分解和投影的计算成本，通常使用有限阶多项式来近似图形滤波器。例如，在[25]、[27]中，使用图拉普拉斯矩阵的高次切比雪夫多项式来近似图滤波器。一个流行的GCN [17]用图拉普拉斯的一阶切比雪夫多项式逼近图滤波器。最近的工作[18]提出限制邻接矩阵的多项式(最大二次)，以进一步降低复杂性。在本研究中，由于其计算性，我们使用TAGCN对触觉数据进行卷积计算效率和表现</p>
+<p>​		脉冲神经网络形成了神经形态计算的核心方法[28]。简单神经网络在生物学上比深度神经网络更合理，并且可以在高能效的神经形态硬件上执行(例如英特尔洛伊希[15])。神经元网络可以具有与神经元网络相似的网络拓扑，但使用不同的神经元模型。神经网络常用的神经元模型包括LIF [21]和SRM [22]。SNNs中的一个问题是尖峰函数是不可微的，使得不可能使用反向传播来训练网络。为了解决这个问题，已经提出了几种解决方案，例如将dnn转换为snn[29]，以及近似尖峰函数的导数[30]，[20]。在这项工作中，我们使用SNN，因为它们能够直接处理尖峰传感器数据。</p>
+<h2 id="用触觉图形学习">用触觉图形学习</h2>
+<p>​		在这一节中，我们描述了我们从基于事件的触觉数据中学习的基于图形的方法。如前所述，与视觉像素不同，用于触摸感测的像素可以以不规则的方式构造。事实上，人体触摸传感器在身体上的分布是不均匀的(流行的皮质类侏儒显示出相应的不同神经需求)。</p>
+<p>​		随着人工电子皮肤在功能和价格上的不断发展，我们预计机器人将结合灵活的皮肤，为人类提供类似(或可能更好)的触摸传感能力。触觉传感器可以“包裹”在现有的身体部位周围，或者具有以不规则配置组织的分类。考虑一下我们实验中使用的NeuTouch[8]；NeuTouch是一种受生物启发的指尖触觉传感器，具有39个以放射状空间排列的像素(图1)。在下文中，我们将使用NeuTouch作为我们的运行示例来描述我们的方法，但是请注意，我们的方法可以用于具有不同taxel配置和布局的其他传感器</p>
+<h3 id="a触觉图形构建">A、触觉图形构建</h3>
+<p>​		为了处理来自触觉传感器的数据，可以采用深度神经网络中使用的标准卷积层[31]。然而，这需要将数据“强制”到网格结构中，这需要用零填充(或插值)单元值指定任意的网格大小。在这里，我们采取了一种更自然的方法，基于底层分类的局部空间排列构建触觉图。</p>
+<p>​		设G = (V，E)为触觉图，其中V为一组N个节点，E为一组无向边4。节点自然地被映射到taxels，但是边缘必须被指定。我们建议利用点的空间/几何配置，并引入基于欧几里德的边计算两点之间的距离</p>
+<p><figure>
+		<a href="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig2.png" data-size="557x294">
+			<img srcset="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig2_hu993ebe522d2bef64ea7b2af418616fb9_51143_480x0_resize_box_2.png 480w, /p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig2_hu993ebe522d2bef64ea7b2af418616fb9_51143_1024x0_resize_box_2.png 1024w"
+				src="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig2.png" width="557" height="294" loading="lazy"
+				alt="&nbsp;">
+		</a>
+		
+	</figure></p>
+<p>​		作为一个具体的例子，图2示出了通过使用上述用于中性触摸的方法构建的触觉图形。我们的实验将在很大程度上比较使用手动方法的方法，但我们包括额外的实验，显示图形连接如何影响对象识别任务的性能。</p>
+<h2 id="btactilesgnet">B、TactileSGNet</h2>
+<p>​		为了处理来自我们触觉图的数据，我们提出了一种脉冲神经网络结构，我们称之为触觉神经网络(如图3所示)。该网络使用LIF神经元，包括拓扑自适应图卷积(TAGConv)层[18]，全连接(FC)层，以及用于分类的最终投票层。在下文中，我们将描述这些组件中的每一个:</p>
+<p>输入：机器人有39个触点，对这39个触点进行监测250个时间片，形成250个图输入</p>
+<p>处理：SNN封装的GNN+MLP</p>
+<p>输出：label</p>
+<p><figure>
+		<a href="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig3.png" data-size="1066x277">
+			<img srcset="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig3_hu7cfdaeda18537b8cef0e38da3efdc253_153472_480x0_resize_box_2.png 480w, /p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig3_hu7cfdaeda18537b8cef0e38da3efdc253_153472_1024x0_resize_box_2.png 1024w"
+				src="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig3.png" width="1066" height="277" loading="lazy"
+				alt="&nbsp;">
+		</a>
+		
+	</figure></p>
+<p><strong>LIF Activations</strong>：</p>
+<p>​		在传统的卷积神经网络中，最常见的激活函数是ReLU [32]及其变体(如ReLU [33])。然而，ReLU激活功能不适用于SNNs。我们使用LIF模型，这是一个描述尖峰神经元动力学的流行模型[34]，[35]，[28]。</p>
+<h2 id="数据集">数据集</h2>
+<p>​		我们使用最近开发的基于事件的触觉数据集比较了这些方法[8]。简而言之，数据集是使用一个7自由度的Franka Emika熊猫手臂收集的，该手臂配备了一个机器人智商2F-140手爪，配备了一个基于NeuTouch事件的触觉传感器[8]和一个ACES解码器[9]，将传感器信号解码为尖峰信号。熊猫选择了各种不同的家居物品来生成两个数据集:</p>
+<ul>
+<li>
+<p>**EvTouch-Objects：**这个数据集包括来自36个对象类的触觉数据(图5(a))。在这些对象中，26个是来自YCB数据集[38]的对象，其余10个对象是选择来补充相对刚性的YCB对象的可变形对象。为了收集触觉数据，机器人抓手抓住物体，将其从桌子上抬起20厘米，然后放回桌子上。我们使用了从举起物体到释放物体这段时间内收集到的数据(≈ 5秒)。对于每个对象类，收集了20个样本，总共产生720个样本。</p>
+</li>
+<li>
+<p>**EvTouch-Containers：**该数据集包括四个容器的触觉数据:一个咖啡罐、一个塑料苏打瓶、一个豆奶盒和一个金属金枪鱼罐(图5 (b))。这些容器的最大体积分别为250克、400克、300克和140克。每个容器分别装满{0%，25%，50%，75%，100%}最大量的水(或打开的金枪鱼罐头的大米)，产生20个对象类。在数据收集过程中，机器人抓手抓住每个容器然后把它抬离桌子5厘米。我们利用抓取物体期间收集的数据，将其举起并保持一段时间(总共约6.5秒)。总共有300个样本(每个对象类15个样本)。该数据集对于触觉传感可能特别具有挑战性，因为权重可能不容易区分。</p>
+<p>对于这两个数据集，我们使用了0.02秒的bin持续时间。感兴趣的读者可以在[8]和相应的网站5中找到关于数据集的更多细节。</p>
+</li>
+</ul>
+<p><figure>
+		<a href="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig5.png" data-size="546x200">
+			<img srcset="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig5_hu7e35d1e5b9992d98878f6df50595d2c0_122459_480x0_resize_box_2.png 480w, /p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig5_hu7e35d1e5b9992d98878f6df50595d2c0_122459_1024x0_resize_box_2.png 1024w"
+				src="/p/sgnet%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/fig5.png" width="546" height="200" loading="lazy"
+				alt="&nbsp;">
+		</a>
+		
+	</figure></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="https://a447593787.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">相关文章</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="https://a447593787.github.io/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
+        
+        
+            <div class="article-image">
+                <img src="/p/snn%E8%84%89%E5%86%B2%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/ANN%E7%A5%9E%E7%BB%8F%E5%85%83%E5%92%8CSNN%E7%A5%9E%E7%BB%8F%E5%85%83%E5%AF%B9%E6%AF%94_hu9de1e6b7822c1602d064b2cf5ef7c4ea_72829_250x150_fill_box_smart1_2.png" width="250" height="150" 
+                        loading="lazy" data-key="" data-hash="md5-4f2vLHtfDTHvxcdnjSIivA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SNN脉冲神经网络</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="https://a447593787.github.io/sgnet/">
+        
+        
+            <div class="article-image">
+                <img src="/sgnet/fig1_hu780fc8ef55f5d63816cb750690a61891_165865_250x150_fill_box_smart1_2.png" width="250" height="150" 
+                        loading="lazy" data-key="" data-hash="md5-R71CTgjW2XZabBmWjMXUVg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SGnet1234324</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">&copy; 2020 Weiliang Lin</section>
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="1.0.5">Stack</a></b> designed by
+        <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>
